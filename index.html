@@ -38,7 +38,6 @@
         .card-header { display: flex; align-items: center; gap: var(--spacing-small); margin-bottom: 15px; font-size: 1.2rem; }
         .phase-badge { display: inline-block; background: var(--gold-glass); color: var(--gold-primary); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; }
 
-        /* TYPOGRAPHY CLASSES */
         .briefing-text { font-size: 0.9rem; color: var(--text-muted); margin-bottom: var(--spacing-small); line-height: 1.4; }
         .briefing-text strong { font-weight: 600; color: var(--text-main); }
         
@@ -55,12 +54,13 @@
 
         /* UI COMPONENTS */
         .calc-select, .calc-in, .api-input { width: 100%; padding: var(--spacing-small); margin-bottom: 15px; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--gold-primary); border-radius: 8px; font-family: 'DM Sans'; outline: none; }
-        .api-input { border-color: var(--text-muted); }
         .action-btn { width: 100%; padding: 12px; background: var(--gold-primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 5px; transition: opacity 0.2s; }
+        .action-btn.secondary { background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary); margin-bottom: 15px;}
         .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .result-box { margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-weight: bold; line-height: 1.5; }
         
-        /* QUIZ SYSTEM STYLES */
+        /* QUIZ SYSTEM */
+        .db-stats { display: flex; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; border: 1px solid var(--text-muted); }
         .quiz-card { background: rgba(255,255,255,0.03); border: 1px solid var(--gold-glass); border-radius: 8px; padding: 15px; margin-top: 15px; }
         .quiz-q { font-weight: 600; margin-bottom: 12px; color: var(--gold-primary); line-height: 1.4; font-size: 0.95rem; }
         .quiz-option { background: var(--bg-color); border: 1px solid var(--text-muted); padding: 10px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 0.9rem; }
@@ -69,17 +69,15 @@
         .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
         .quiz-explanation { margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 0.85rem; display: none; border-left: 3px solid var(--success); }
 
-        /* MODAL */
+        /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--surface-color); border: 1px solid var(--gold-primary); border-radius: 12px; padding: 20px; width: 100%; max-width: 400px; }
         
-        /* JOB WAR ROOM STYLES */
+        /* JOB WAR ROOM */
         .job-card { background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold-primary); padding: 12px; margin-bottom: 10px; border-radius: 4px; }
         .job-title { font-weight: bold; color: var(--text-main); font-size: 1rem; }
         .job-detail { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
-        
-        /* MODULES GRID */
         .modules-grid { display: flex; flex-direction: column; gap: var(--spacing-small); }
         .module-item { padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
     </style>
@@ -91,11 +89,11 @@
         <button class="settings-btn" id="openSettingsBtn"><i class="fa-solid fa-gear"></i> Settings</button>
     </header>
 
-    <!-- SETTINGS MODAL (API KEY VAULT) -->
+    <!-- SETTINGS MODAL -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-content">
             <h2 style="margin-bottom: 15px;">AI Configuration</h2>
-            <p class="briefing-text">Paste your free Google Gemini API key here. It saves locally to your phone and never goes to a server.</p>
+            <p class="briefing-text">Paste your free Google Gemini API key here.</p>
             <input type="password" id="apiKeyInput" class="api-input" placeholder="AIzaSy...">
             <button class="action-btn" id="saveKeyBtn">Save Key</button>
             <button class="action-btn" id="closeSettingsBtn" style="background: transparent; color: var(--text-main); border: 1px solid var(--text-muted); margin-top: 10px;">Close</button>
@@ -125,9 +123,14 @@
     <section id="knowledge" class="app-section">
         <div class="phase-badge">CLINICAL ARSENAL</div>
 
-        <!-- AI QUIZ ENGINE (POWERED BY GEMINI) -->
+        <!-- AI QUIZ ENGINE WITH DATABASE STORAGE -->
         <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-robot"></i> AI Quiz Engine</h2>
+            <h2 class="card-header"><i class="fa-solid fa-robot"></i> Smart Quiz Bank</h2>
+            
+            <div class="db-stats">
+                <span><i class="fa-solid fa-database"></i> Local Bank: <strong id="dbCount" style="color: var(--success);">0</strong> MCQs</span>
+            </div>
+
             <select id="quizTopic" class="calc-select">
                 <option value="Cardiovascular Pharmacology (HTN, HF, Arrhythmias)">Cardiovascular</option>
                 <option value="Endocrine Pharmacology (Diabetes & Thyroid)">Endocrinology</option>
@@ -137,7 +140,10 @@
                 <option value="Beginner Pharmacy Student">Beginner</option>
                 <option value="Clinical Exam Level">Exam Level</option>
             </select>
-            <button id="generateQuizBtn" class="action-btn">Generate 3 MCQs</button>
+            
+            <button id="practiceQuizBtn" class="action-btn secondary"><i class="fa-solid fa-play"></i> Practice Random 3 (Offline)</button>
+            <button id="generateQuizBtn" class="action-btn"><i class="fa-solid fa-cloud-arrow-down"></i> Generate & Store 10 New MCQs</button>
+            
             <div id="quizContainer"></div>
         </div>
 
@@ -173,41 +179,25 @@
         
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-hospital"></i> Clinical Pharmacy</h2>
-            <p class="briefing-text">Target JCI-accredited corporate hospitals first.</p>
             <div class="job-card">
-                <div class="job-title">Apollo Hospitals (Jubilee Hills/Secunderabad)</div>
+                <div class="job-title">Apollo Hospitals (Jubilee Hills)</div>
                 <div class="job-detail"><strong>Role:</strong> Clinical Pharmacist</div>
-                <div class="job-detail"><strong>Strategy:</strong> LinkedIn direct to HR; apollo.jobs portal.</div>
             </div>
             <div class="job-card">
-                <div class="job-title">Yashoda Hospitals (Somajiguda/Secunderabad)</div>
+                <div class="job-title">Yashoda Hospitals</div>
                 <div class="job-detail"><strong>Role:</strong> Ward Pharmacist</div>
-                <div class="job-detail"><strong>Strategy:</strong> Walk-in highly effective here.</div>
-            </div>
-            <div class="job-card">
-                <div class="job-title">KIMS Hospitals</div>
-                <div class="job-detail"><strong>Role:</strong> Clinical Pharmacist</div>
-                <div class="job-detail"><strong>Strategy:</strong> Check kims.co.in/careers.</div>
             </div>
         </div>
 
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-shield-virus"></i> Pharmacovigilance (CROs)</h2>
-            <p class="briefing-text">Top targets for fresher PharmD graduates.</p>
             <div class="job-card" style="border-left-color: var(--success);">
                 <div class="job-title">Syneos Health (HITEC City)</div>
                 <div class="job-detail"><strong>Role:</strong> Global Safety Associate</div>
-                <div class="job-detail"><strong>Note:</strong> Highest fresher pay; selective. Needs GCP.</div>
             </div>
             <div class="job-card">
                 <div class="job-title">Parexel (HITEC City)</div>
                 <div class="job-detail"><strong>Role:</strong> PV Associate</div>
-                <div class="job-detail"><strong>Note:</strong> Established structured training.</div>
-            </div>
-            <div class="job-card">
-                <div class="job-title">TCS / Cognizant / Accenture</div>
-                <div class="job-detail"><strong>Role:</strong> Drug Safety Associate</div>
-                <div class="job-detail"><strong>Note:</strong> Mass walk-in drives frequently posted on Naukri.</div>
             </div>
         </div>
     </section>
@@ -251,20 +241,11 @@
             apiKeyInput.value = localStorage.getItem('aq_api_key') || '';
             settingsModal.classList.add('active');
         });
-
-        document.getElementById('closeSettingsBtn').addEventListener('click', () => {
-            settingsModal.classList.remove('active');
-        });
-
+        document.getElementById('closeSettingsBtn').addEventListener('click', () => settingsModal.classList.remove('active'));
         document.getElementById('saveKeyBtn').addEventListener('click', () => {
             const key = apiKeyInput.value.trim();
-            if (key) {
-                localStorage.setItem('aq_api_key', key);
-                checkKeyStatus();
-                settingsModal.classList.remove('active');
-            } else {
-                alert("Please enter a valid key.");
-            }
+            if (key) { localStorage.setItem('aq_api_key', key); checkKeyStatus(); settingsModal.classList.remove('active'); } 
+            else { alert("Please enter a valid key."); }
         });
 
         function checkKeyStatus() {
@@ -273,89 +254,139 @@
                 settingsBtn.innerHTML = '<i class="fa-solid fa-check"></i> AI Ready';
             }
         }
-        checkKeyStatus(); // Run on load
+        checkKeyStatus();
 
-        // GEMINI AI DIRECT FETCH LOGIC (Updated & Error-Proofed)
-        async function callGemini(prompt, forceJSON = false) {
-            const apiKey = localStorage.getItem('aq_api_key');
-            if (!apiKey) {
-                alert("Please open Settings and enter your Gemini API Key first.");
-                return null;
+        // ----------------------------------------------------
+        // INDEXED-DB: THE SMART STORAGE (NO DUPLICATES)
+        // ----------------------------------------------------
+        let db;
+        const request = indexedDB.open("AequitasDB", 1);
+        request.onupgradeneeded = (e) => {
+            db = e.target.result;
+            if (!db.objectStoreNames.contains("mcqs")) {
+                // We use the question string ('q') as the unique key to prevent duplicates
+                const store = db.createObjectStore("mcqs", { keyPath: "q" });
+                store.createIndex("topic", "topic", { unique: false });
             }
+        };
+        request.onsuccess = (e) => { 
+            db = e.target.result; 
+            updateDBCount(); 
+        };
 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        function updateDBCount() {
+            if(!db) return;
+            const tx = db.transaction("mcqs", "readonly");
+            const countReq = tx.objectStore("mcqs").count();
+            countReq.onsuccess = () => { document.getElementById("dbCount").innerText = countReq.result; };
+        }
+
+        function saveToDB(mcqArray, topic) {
+            const tx = db.transaction("mcqs", "readwrite");
+            const store = tx.objectStore("mcqs");
+            let added = 0;
+            mcqArray.forEach(mcq => {
+                mcq.topic = topic; 
+                const req = store.put(mcq); // put overwrites duplicates safely based on question text
+                req.onsuccess = () => added++;
+            });
+            tx.oncomplete = () => {
+                updateDBCount();
+            };
+        }
+
+        function renderQuiz(dataArray) {
+            const container = document.getElementById('quizContainer');
+            let htmlStr = '';
+            if(dataArray.length === 0) {
+                container.innerHTML = "<p class='briefing-text'>No MCQs found. Generate some first!</p>";
+                return;
+            }
+            dataArray.forEach((item, index) => {
+                htmlStr += `<div class="quiz-card" data-ans="${item.ans}">
+                    <div class="quiz-q">Q${index + 1}. ${item.q}</div>
+                    <div class="opts-container">`;
+                item.opts.forEach((opt, oIdx) => {
+                    htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`;
+                });
+                htmlStr += `</div><div class="quiz-explanation"><strong>Explanation:</strong> ${item.exp}</div></div>`;
+            });
+            container.innerHTML = htmlStr;
+        }
+
+        // ----------------------------------------------------
+        // GEMINI AI DIRECT FETCH (Using gemini-1.5-pro-latest)
+        // ----------------------------------------------------
+        async function callGemini(prompt) {
+            const apiKey = localStorage.getItem('aq_api_key');
+            if (!apiKey) { alert("Please open Settings and enter your Gemini API Key first."); return null; }
+
+            // Using the pro model to avoid the "model not found" error on basic accounts
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${apiKey}`;
             
             const payload = {
-                contents: [{ parts: [{ text: prompt }] }]
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: "application/json" }
             };
 
-            if (forceJSON) {
-                payload.generationConfig = { responseMimeType: "application/json" };
-            }
-
             try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    const errorMsg = errorData.error ? errorData.error.message : "Unknown API Error";
-                    alert(`Google API Error: ${errorMsg}`);
-                    console.error("Full Google Error:", errorData);
+                    alert(`Google API Error: ${errorData.error ? errorData.error.message : "Unknown"}`);
                     return null;
                 }
-                
                 const data = await response.json();
                 return data.candidates[0].content.parts[0].text;
-                
             } catch (error) {
-                console.error("Fetch Execution Error:", error);
                 alert("Network failed. Please verify your internet connection.");
                 return null;
             }
         }
 
-        // AI QUIZ GENERATOR LOGIC
+        // GENERATE & STORE
         document.getElementById('generateQuizBtn').addEventListener('click', async () => {
             const btn = document.getElementById('generateQuizBtn');
             const topic = document.getElementById('quizTopic').value;
             const diff = document.getElementById('quizDiff').value;
-            const container = document.getElementById('quizContainer');
             
-            btn.textContent = "Generating... (takes ~5s)";
+            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating 10 MCQs...";
             btn.disabled = true;
-            container.innerHTML = '';
 
-            const prompt = `You are a PharmD clinical pharmacy educator. Generate exactly 3 Multiple Choice Questions (MCQs) on: ${topic}. Difficulty level: ${diff}. 
-            Return a JSON array of objects. Each object must have keys: "q" (string, the question), "opts" (array of exactly 4 strings for options), "ans" (integer 0-3, index of correct option), and "exp" (string, clinical explanation).`;
+            const prompt = `You are a PharmD clinical pharmacy educator. Generate exactly 10 Multiple Choice Questions (MCQs) on: ${topic}. Difficulty level: ${diff}. 
+            Return a JSON array of objects. Each object must have exactly these keys: "q" (string, the question), "opts" (array of exactly 4 strings for options), "ans" (integer 0-3, index of correct option), and "exp" (string, clinical explanation). Ensure strict JSON formatting.`;
 
-            const rawText = await callGemini(prompt, true); 
+            const rawText = await callGemini(prompt); 
             
             if (rawText) {
                 try {
                     const data = JSON.parse(rawText);
-                    let htmlStr = '';
-                    data.forEach((item, index) => {
-                        htmlStr += `<div class="quiz-card" data-ans="${item.ans}">
-                            <div class="quiz-q">Q${index + 1}. ${item.q}</div>
-                            <div class="opts-container">`;
-                        item.opts.forEach((opt, oIdx) => {
-                            htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`;
-                        });
-                        htmlStr += `</div><div class="quiz-explanation"><strong>Explanation:</strong> ${item.exp}</div></div>`;
-                    });
-                    container.innerHTML = htmlStr;
+                    saveToDB(data, topic);
+                    renderQuiz(data.slice(0, 5)); // Show 5 immediately
                 } catch (e) {
-                    container.innerHTML = "<p style='color:var(--danger)'>Error parsing AI response.</p>";
-                    console.error("JSON Parse Error:", e);
+                    alert("AI returned malformed data. Try again.");
                 }
             }
-            
-            btn.textContent = "Generate 3 MCQs";
+            btn.innerHTML = "<i class='fa-solid fa-cloud-arrow-down'></i> Generate & Store 10 New MCQs";
             btn.disabled = false;
+        });
+
+        // PRACTICE FROM LOCAL BANK (OFFLINE)
+        document.getElementById('practiceQuizBtn').addEventListener('click', () => {
+            const topic = document.getElementById('quizTopic').value;
+            const tx = db.transaction("mcqs", "readonly");
+            const store = tx.objectStore("mcqs");
+            const request = store.getAll();
+            
+            request.onsuccess = () => {
+                const allQs = request.result.filter(q => q.topic === topic);
+                // Shuffle array
+                const shuffled = allQs.sort(() => 0.5 - Math.random());
+                // Get sub-array of first 5 elements
+                let selected = shuffled.slice(0, 5);
+                renderQuiz(selected);
+            };
         });
 
         // EVENT DELEGATION: Quiz Option Click Logic
