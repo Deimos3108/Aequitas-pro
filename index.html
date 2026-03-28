@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AEQUITAS CP PRO v3.0</title>
+    <title>AEQUITAS CP PRO v5.2</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -37,22 +37,19 @@
 
         .briefing-text { font-size: 0.9rem; color: var(--text-muted); margin-bottom: var(--spacing-small); line-height: 1.4; }
         .briefing-text strong { font-weight: 600; color: var(--text-main); }
-        [data-status="placeholder"] .glass-card { opacity: 0.8; }
-        .status-badge { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; background: var(--warning); color: var(--bg-color); padding: 4px 8px; border-radius: 4px; margin-left: auto; font-weight: bold; text-transform: uppercase; }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--surface-color); border-top: 1px solid var(--gold-glass); display: flex; justify-content: space-around; padding: var(--spacing-small) 0; padding-bottom: env(safe-area-inset-bottom, 15px); z-index: var(--z-bottom-nav); }
         .nav-item { color: var(--text-muted); text-align: center; font-size: 0.75rem; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 60px; cursor: pointer; transition: color 0.2s ease; }
         .nav-item i { font-size: var(--nav-icon-size); pointer-events: none; }
         .nav-item span { pointer-events: none; }
         .nav-item.active { color: var(--gold-primary); }
-        .nav-item.active i { transform: scale(1.1); }
 
         .calc-select, .calc-in, .api-input { width: 100%; padding: var(--spacing-small); margin-bottom: 15px; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--gold-primary); border-radius: 8px; font-family: 'DM Sans'; outline: none; }
-        textarea.calc-in { resize: vertical; min-height: 80px; }
+        textarea.calc-in { resize: vertical; min-height: 100px; }
         .action-btn { width: 100%; padding: 12px; background: var(--gold-primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 5px; transition: opacity 0.2s; }
         .action-btn.secondary { background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary); margin-bottom: 15px;}
         .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .result-box { margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-weight: bold; line-height: 1.5; }
+        .result-box { margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap;}
         
         .db-stats { display: flex; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; border: 1px solid var(--text-muted); }
         .quiz-card { background: rgba(255,255,255,0.03); border: 1px solid var(--gold-glass); border-radius: 8px; padding: 15px; margin-top: 15px; }
@@ -60,19 +57,24 @@
         .quiz-option { background: var(--bg-color); border: 1px solid var(--text-muted); padding: 10px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 0.9rem; }
         .quiz-option.correct { background: var(--success); color: #000; border-color: var(--success); pointer-events: none; }
         .quiz-option.incorrect { background: var(--danger); color: #fff; border-color: var(--danger); pointer-events: none; }
-        .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
         .quiz-explanation { margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 0.85rem; display: none; border-left: 3px solid var(--success); }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--surface-color); border: 1px solid var(--gold-primary); border-radius: 12px; padding: 20px; width: 100%; max-width: 400px; }
+        .modal-content { background: var(--surface-color); border: 1px solid var(--gold-primary); border-radius: 12px; padding: 20px; width: 100%; max-width: 400px; max-height: 80vh; overflow-y: auto;}
         
         .job-card { background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold-primary); padding: 12px; margin-bottom: 10px; border-radius: 4px; position: relative; }
         .job-title { font-weight: bold; color: var(--text-main); font-size: 1rem; }
         .job-detail { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
-        .badge-status { position: absolute; top: 12px; right: 12px; font-size: 0.7rem; padding: 3px 6px; border-radius: 4px; background: rgba(255,255,255,0.1); }
-        .modules-grid { display: flex; flex-direction: column; gap: var(--spacing-small); }
-        .module-item { padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
+        
+        .fab-mentor { position: fixed; bottom: 100px; right: 20px; background: var(--gold-primary); color: var(--bg-color); width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(201, 168, 76, 0.4); cursor: pointer; z-index: 999; transition: transform 0.2s; }
+        .fab-mentor:active { transform: scale(0.9); }
+        .chat-msg { padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.9rem; line-height: 1.4;}
+        .chat-user { background: rgba(255,255,255,0.1); margin-left: 20px; border-bottom-right-radius: 0; }
+        .chat-ai { background: rgba(201, 168, 76, 0.15); margin-right: 20px; border-bottom-left-radius: 0; border: 1px solid var(--gold-primary); }
+        
+        .quota-box { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--text-muted); display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;}
+        .model-indicator { font-size: 0.7rem; color: var(--gold-primary); margin-top: 5px; text-align: center; display: none; }
     </style>
 </head>
 <body>
@@ -82,17 +84,44 @@
         <button class="settings-btn" id="openSettingsBtn"><i class="fa-solid fa-gear"></i> Settings</button>
     </header>
 
+    <!-- SETTINGS MODAL & QUOTA TRACKER -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-content">
-            <h2 style="margin-bottom: 15px;">Groq AI Config</h2>
-            <p class="briefing-text">Paste your free Groq API key (Starts with gsk_). Powered by Llama-3.3.</p>
-            <input type="password" id="apiKeyInput" class="api-input" placeholder="gsk_...">
+            <h2 style="margin-bottom: 15px;">OpenRouter Config</h2>
+            
+            <div class="quota-box">
+                <span><i class="fa-solid fa-chart-pie"></i> Daily Free Limit:</span>
+                <strong id="dailyQuotaDisplay" style="color: var(--success);">0 / 200</strong>
+            </div>
+
+            <p class="briefing-text">Paste your free OpenRouter API key. This unlocks specialized AIs for specific tasks.</p>
+            <input type="password" id="apiKeyInput" class="api-input" placeholder="sk-or-v1-...">
             <button class="action-btn" id="saveKeyBtn">Save Key</button>
             <button class="action-btn" id="closeSettingsBtn" style="background: transparent; color: var(--text-main); border: 1px solid var(--text-muted); margin-top: 10px;">Close</button>
         </div>
     </div>
 
-    <!-- COMMAND CENTER -->
+    <!-- AI MENTOR CHAT MODAL -->
+    <div class="modal-overlay" id="mentorModal">
+        <div class="modal-content" style="height: 70vh; display: flex; flex-direction: column;">
+            <h2 style="margin-bottom: 10px; color: var(--gold-primary);"><i class="fa-solid fa-user-doctor"></i> AI Mentor</h2>
+            <select id="mentorPersona" class="calc-select" style="margin-bottom: 10px;">
+                <option value="clinical">Dr. Clinical (Pharmacology)</option>
+                <option value="career">Career Coach</option>
+            </select>
+            <div id="chatHistory" style="flex: 1; overflow-y: auto; margin-bottom: 10px; padding-right: 5px;">
+                <div class="chat-msg chat-ai">Hello Ahmed. What are we tackling today?</div>
+            </div>
+            <textarea id="chatInput" class="calc-in" placeholder="Ask a clinical or career question..." style="min-height: 50px; margin-bottom: 5px;"></textarea>
+            <div id="chatModelIndicator" class="model-indicator"><i class="fa-solid fa-microchip"></i> Routing to Gemma 2 (Medical)...</div>
+            <button class="action-btn" id="sendChatBtn">Send <i class="fa-solid fa-paper-plane"></i></button>
+            <button class="action-btn" id="closeMentorBtn" style="background: transparent; color: var(--text-main); border: 1px solid var(--text-muted); margin-top: 5px; padding: 8px;">Close</button>
+        </div>
+    </div>
+
+    <div class="fab-mentor" id="fabMentor"><i class="fa-solid fa-message"></i></div>
+
+    <!-- DASHBOARD -->
     <section id="dashboard" class="app-section active">
         <div class="phase-badge">PHASE 1: FOUNDATION</div>
         <div class="glass-card">
@@ -103,23 +132,12 @@
         </div>
     </section>
 
-    <!-- CALENDAR -->
-    <section id="calendar" class="app-section" data-status="placeholder">
-        <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-calendar-check"></i> War Calendar <span class="status-badge">In Dev</span></h2>
-            <p class="placeholder-message"><i class="fa-solid fa-hammer"></i> 90-Day phased task engine will load here.</p>
-        </div>
-    </section>
-
     <!-- KNOWLEDGE ENGINE -->
     <section id="knowledge" class="app-section">
         <div class="phase-badge">CLINICAL ARSENAL</div>
-
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-robot"></i> Smart Quiz Bank</h2>
-            <div class="db-stats">
-                <span><i class="fa-solid fa-database"></i> Local Bank: <strong id="dbCount" style="color: var(--success);">0</strong> MCQs</span>
-            </div>
+            <div class="db-stats"><span><i class="fa-solid fa-database"></i> Local Bank: <strong id="dbCount" style="color: var(--success);">0</strong> MCQs</span></div>
             <select id="quizTopic" class="calc-select">
                 <option value="Cardiovascular Pharmacology (HTN, HF, Arrhythmias)">Cardiovascular</option>
                 <option value="Endocrine Pharmacology (Diabetes & Thyroid)">Endocrinology</option>
@@ -130,18 +148,17 @@
                 <option value="Clinical Exam Level">Exam Level</option>
             </select>
             <button id="practiceQuizBtn" class="action-btn secondary"><i class="fa-solid fa-play"></i> Practice Random 3 (Offline)</button>
-            <button id="generateQuizBtn" class="action-btn"><i class="fa-solid fa-cloud-arrow-down"></i> Generate & Store 10 New MCQs</button>
+            <div id="quizModelIndicator" class="model-indicator"><i class="fa-solid fa-microchip"></i> Routing to Llama 3 (JSON Structuring)...</div>
+            <button id="generateQuizBtn" class="action-btn"><i class="fa-solid fa-cloud-arrow-down"></i> Generate & Store 5 New MCQs</button>
             <div id="quizContainer"></div>
         </div>
-
+        
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-calculator"></i> PK Calculators</h2>
             <select id="calcSelector" class="calc-select">
                 <option value="crcl">1. Creatinine Clearance</option>
-                <option value="calcium">2. Corrected Calcium</option>
-                <option value="loading">3. Loading Dose</option>
-                <option value="bsa">4. BSA & BMI</option>
-                <option value="infusion">5. IV Infusion Rate</option>
+                <option value="loading">2. Loading Dose</option>
+                <option value="bsa">3. BSA & BMI</option>
             </select>
             <div id="calcInputs"></div>
             <button id="runCalcBtn" class="action-btn">Calculate</button>
@@ -149,70 +166,42 @@
         </div>
     </section>
 
-    <!-- CAREER (JOB WAR ROOM + PV + WRITING) -->
+    <!-- CAREER -->
     <section id="career" class="app-section">
         <div class="phase-badge">HYDERABAD JOB WAR ROOM</div>
-        
-        <!-- Job Tracker -->
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-crosshairs"></i> Application Tracker</h2>
             <input type="text" id="jobCompany" class="calc-in" placeholder="Company (e.g. Syneos Health)">
             <input type="text" id="jobRole" class="calc-in" placeholder="Role (e.g. PV Associate)">
-            <select id="jobStatus" class="calc-select">
-                <option value="Applied">Applied</option>
-                <option value="Interviewing">Interviewing</option>
-                <option value="Rejected">Rejected</option>
-            </select>
+            <select id="jobStatus" class="calc-select"><option value="Applied">Applied</option><option value="Interviewing">Interviewing</option><option value="Rejected">Rejected</option></select>
             <button id="addJobBtn" class="action-btn secondary">Log Application</button>
             <div id="jobList" style="margin-top: 15px;"></div>
         </div>
+    </section>
 
-        <!-- PV Workbench -->
+    <!-- IELTS ASSESSOR -->
+    <section id="ielts" class="app-section">
+        <div class="phase-badge">GLOBAL RUNWAY</div>
         <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-shield-virus"></i> PV Workbench</h2>
-            <p class="briefing-text">Naranjo Causality Assessment Calculator</p>
-            <select id="n1" class="calc-select"><option value="0">1. Previous reports? (No/Unk=0, Yes=+1)</option><option value="1">Yes (+1)</option></select>
-            <select id="n2" class="calc-select"><option value="0">2. AE appeared after drug? (No=0, Yes=+2)</option><option value="2">Yes (+2)</option></select>
-            <select id="n3" class="calc-select"><option value="0">3. AE improved upon stopping? (No=0, Yes=+1)</option><option value="1">Yes (+1)</option></select>
-            <select id="n4" class="calc-select"><option value="0">4. AE reappeared on re-challenge? (No=0, Yes=+2)</option><option value="2">Yes (+2)</option></select>
-            <select id="n5" class="calc-select"><option value="0">5. Objective evidence/Labs? (No=0, Yes=+1)</option><option value="1">Yes (+1)</option></select>
-            <button id="calcNaranjoBtn" class="action-btn">Calculate Score</button>
-            <div id="naranjoResult" class="result-box"></div>
-        </div>
-
-        <!-- Medical Writing Studio -->
-        <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-pen-nib"></i> Med Writing Studio</h2>
-            <p class="briefing-text">Clinical SOAP Note Builder</p>
-            <input type="text" id="soapTitle" class="calc-in" placeholder="Case Title (e.g. Pt with HTN & T2DM)">
-            <textarea id="soapS" class="calc-in" placeholder="Subjective (CC, HPI)"></textarea>
-            <textarea id="soapO" class="calc-in" placeholder="Objective (Vitals, Labs)"></textarea>
-            <textarea id="soapA" class="calc-in" placeholder="Assessment (Diagnosis)"></textarea>
-            <textarea id="soapP" class="calc-in" placeholder="Plan (Treatment, Monitoring)"></textarea>
-            <button id="saveSoapBtn" class="action-btn secondary"><i class="fa-solid fa-folder-plus"></i> Save to Portfolio</button>
-            <div id="portfolioList" style="margin-top: 15px;"></div>
+            <h2 class="card-header"><i class="fa-solid fa-earth-americas"></i> IELTS Band 9 Evaluator</h2>
+            <p class="briefing-text">Paste your Task 2 Essay. The AI grades against official rubrics.</p>
+            <select id="ieltsType" class="calc-select"><option value="Writing Task 2 (Academic Essay)">Writing Task 2</option><option value="Speaking Part 2 (Long Turn)">Speaking Part 2</option></select>
+            <textarea id="ieltsInput" class="calc-in" placeholder="Paste your essay or transcript here..."></textarea>
+            <div id="ieltsModelIndicator" class="model-indicator"><i class="fa-solid fa-microchip"></i> Routing to Mistral 7B (Linguistics)...</div>
+            <button id="gradeIeltsBtn" class="action-btn"><i class="fa-solid fa-check-double"></i> Assess Band Score</button>
+            <div id="ieltsResult" class="result-box"></div>
         </div>
     </section>
 
-    <!-- IELTS -->
-    <section id="ielts" class="app-section" data-status="placeholder">
-        <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-earth-americas"></i> IELTS Band 9 <span class="status-badge">In Dev</span></h2>
-            <p class="placeholder-message"><i class="fa-solid fa-hammer"></i> AI English Evaluator & Speaking Simulator will load here.</p>
-        </div>
-    </section>
-
-    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav" id="mainNav">
         <div class="nav-item active" data-section="dashboard"><i class="fa-solid fa-shield-halved"></i><span>Command</span></div>
-        <div class="nav-item" data-section="calendar"><i class="fa-solid fa-calendar-day"></i><span>Calendar</span></div>
         <div class="nav-item" data-section="knowledge"><i class="fa-solid fa-brain"></i><span>Learn</span></div>
         <div class="nav-item" data-section="career"><i class="fa-solid fa-crosshairs"></i><span>Career</span></div>
         <div class="nav-item" data-section="ielts"><i class="fa-solid fa-language"></i><span>IELTS</span></div>
     </nav>
 
     <script>
-        // NAVIGATION LOGIC
+        // NAVIGATION
         document.getElementById('mainNav').addEventListener('click', (event) => {
             const navItem = event.target.closest('.nav-item');
             if (!navItem) return;
@@ -225,80 +214,238 @@
             if (navigator.vibrate) navigator.vibrate(50);
         });
 
-        // SETTINGS
+        // SETTINGS & SMART QUOTA SYSTEM
         const settingsModal = document.getElementById('settingsModal');
         const apiKeyInput = document.getElementById('apiKeyInput');
         const settingsBtn = document.getElementById('openSettingsBtn');
+        const dailyQuotaDisplay = document.getElementById('dailyQuotaDisplay');
+
+        function updateDailyQuota() {
+            const today = new Date().toDateString();
+            let storedDate = localStorage.getItem('aq_quota_date');
+            let calls = parseInt(localStorage.getItem('aq_daily_calls') || '0');
+            
+            if(storedDate !== today) {
+                calls = 0;
+                localStorage.setItem('aq_quota_date', today);
+                localStorage.setItem('aq_daily_calls', '0');
+            }
+            dailyQuotaDisplay.innerText = `${calls} / 200`;
+            
+            // Visual Warning System
+            if (calls >= 150 && calls < 190) dailyQuotaDisplay.style.color = "var(--warning)";
+            else if (calls >= 190) dailyQuotaDisplay.style.color = "var(--danger)";
+            else dailyQuotaDisplay.style.color = "var(--success)";
+            
+            return calls;
+        }
+
+        function incrementQuota() {
+            let calls = parseInt(localStorage.getItem('aq_daily_calls') || '0');
+            localStorage.setItem('aq_daily_calls', (calls + 1).toString());
+            updateDailyQuota();
+        }
 
         document.getElementById('openSettingsBtn').addEventListener('click', () => {
-            apiKeyInput.value = localStorage.getItem('aq_groq_key') || '';
+            apiKeyInput.value = localStorage.getItem('aq_or_key') || '';
+            updateDailyQuota();
             settingsModal.classList.add('active');
         });
         document.getElementById('closeSettingsBtn').addEventListener('click', () => settingsModal.classList.remove('active'));
         document.getElementById('saveKeyBtn').addEventListener('click', () => {
             const key = apiKeyInput.value.trim();
-            if (key) { localStorage.setItem('aq_groq_key', key); checkKeyStatus(); settingsModal.classList.remove('active'); } 
+            if (key) { localStorage.setItem('aq_or_key', key); checkKeyStatus(); settingsModal.classList.remove('active'); } 
             else { alert("Please enter a valid key."); }
         });
 
         function checkKeyStatus() {
-            if (localStorage.getItem('aq_groq_key')) {
+            if (localStorage.getItem('aq_or_key')) {
                 settingsBtn.classList.add('ready');
                 settingsBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> AI Ready';
             }
         }
         checkKeyStatus();
+        updateDailyQuota();
 
-        // INDEXED-DB FOR MCQS
+        // ----------------------------------------------------------------
+        // THE ORCHESTRATION ENGINE (Task-Specific Routing & Fallbacks)
+        // ----------------------------------------------------------------
+        async function callOpenRouter(systemPrompt, userPrompt, taskType = 'general', forceJson = false) {
+            const apiKey = localStorage.getItem('aq_or_key');
+            if (!apiKey) { alert("Please open Settings and enter your OpenRouter API Key."); return null; }
+
+            let currentCalls = updateDailyQuota();
+            
+            // PRE-LIMIT WARNING
+            if(currentCalls >= 190 && currentCalls < 200) {
+                alert("Warning: You are approaching your 200/day free limit. Use remaining calls wisely!");
+            } else if(currentCalls >= 200) {
+                alert("Daily Safety Limit Hit! You've reached 200 calls today. The system is locked until midnight to protect your account.");
+                return null;
+            }
+
+            // Task Routing: Pick the mathematically best model first, then fallbacks
+            let modelsToTry = [];
+            if (taskType === 'clinical') {
+                modelsToTry = ["google/gemma-2-9b-it:free", "meta-llama/llama-3-8b-instruct:free"];
+            } else if (taskType === 'json') {
+                modelsToTry = ["meta-llama/llama-3-8b-instruct:free", "mistralai/mistral-7b-instruct:free"];
+            } else if (taskType === 'ielts') {
+                modelsToTry = ["mistralai/mistral-7b-instruct:free", "meta-llama/llama-3-8b-instruct:free"];
+            } else {
+                modelsToTry = ["meta-llama/llama-3-8b-instruct:free"];
+            }
+
+            const url = "https://openrouter.ai/api/v1/chat/completions";
+            
+            for (let i = 0; i < modelsToTry.length; i++) {
+                const model = modelsToTry[i];
+                console.log(`Routing task '${taskType}' to: ${model}`);
+                
+                const payload = {
+                    model: model,
+                    messages: [ { role: "system", content: systemPrompt }, { role: "user", content: userPrompt } ]
+                };
+                if(forceJson) payload.response_format = { type: "json_object" };
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 
+                            'Authorization': `Bearer ${apiKey}`, 
+                            'Content-Type': 'application/json',
+                            'HTTP-Referer': 'https://aequitas-pro.com',
+                            'X-Title': 'Aequitas CP Pro'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        incrementQuota();
+                        const data = await response.json(); 
+                        return data.choices[0].message.content;
+                    }
+
+                    if (response.status === 429) {
+                        alert("OpenRouter is receiving too many requests globally right now. Please wait 60 seconds and try again.");
+                        return null; // Don't fallback, just wait.
+                    }
+                    
+                } catch (error) {
+                    console.error(`Model ${model} failed. Trying fallback...`);
+                }
+            }
+            
+            alert("All routed models are currently busy. Please try again in a few minutes.");
+            return null;
+        }
+
+        // MENTOR CHAT LOGIC (Routes to Gemma 2)
+        const mentorModal = document.getElementById('mentorModal');
+        document.getElementById('fabMentor').addEventListener('click', () => mentorModal.classList.add('active'));
+        document.getElementById('closeMentorBtn').addEventListener('click', () => mentorModal.classList.remove('active'));
+
+        document.getElementById('sendChatBtn').addEventListener('click', async () => {
+            const inputEl = document.getElementById('chatInput');
+            const userText = inputEl.value.trim();
+            if(!userText) return;
+            
+            const historyBox = document.getElementById('chatHistory');
+            historyBox.innerHTML += `<div class="chat-msg chat-user">${userText}</div>`;
+            inputEl.value = '';
+            
+            const personaType = document.getElementById('mentorPersona').value;
+            let personaPrompt = "You are an expert clinical pharmacist. Give concise, evidence-based medical advice.";
+            if (personaType === 'career') personaPrompt = "You are a strict pharma career coach helping secure PV and hospital jobs in India.";
+            
+            const btn = document.getElementById('sendChatBtn');
+            const indicator = document.getElementById('chatModelIndicator');
+            
+            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i>";
+            indicator.style.display = "block";
+            
+            const aiResponse = await callOpenRouter(personaPrompt, userText, 'clinical');
+            
+            if(aiResponse) {
+                historyBox.innerHTML += `<div class="chat-msg chat-ai">${aiResponse.replace(/\n/g, '<br>')}</div>`;
+                historyBox.scrollTop = historyBox.scrollHeight;
+            }
+            
+            btn.innerHTML = "Send <i class='fa-solid fa-paper-plane'></i>";
+            indicator.style.display = "none";
+        });
+
+        // IELTS EVALUATOR LOGIC (Routes to Mistral)
+        document.getElementById('gradeIeltsBtn').addEventListener('click', async () => {
+            const text = document.getElementById('ieltsInput').value.trim();
+            if(!text) { alert("Please paste some text first."); return; }
+            const type = document.getElementById('ieltsType').value;
+            const btn = document.getElementById('gradeIeltsBtn');
+            const resBox = document.getElementById('ieltsResult');
+            const indicator = document.getElementById('ieltsModelIndicator');
+            
+            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Analyzing..."; 
+            btn.disabled = true; 
+            resBox.style.display = 'none';
+            indicator.style.display = "block";
+
+            const sysPrompt = "You are a strict IELTS Band 9 examiner. Grade the text provided. Give an estimated Band Score (0-9). Break down feedback by: Task Achievement, Coherence, Lexical Resource, and Grammar. Be concise.";
+            const aiResponse = await callOpenRouter(sysPrompt, `Type: ${type}\n\nText: ${text}`, 'ielts');
+            
+            if(aiResponse) { resBox.innerHTML = aiResponse.replace(/\n/g, '<br>'); resBox.style.display = 'block'; }
+            
+            btn.innerHTML = "<i class='fa-solid fa-check-double'></i> Assess Band Score"; 
+            btn.disabled = false;
+            indicator.style.display = "none";
+        });
+
+        // INDEXED DB & QUIZ LOGIC (Routes to Llama 3)
         let db;
         const request = indexedDB.open("AequitasDB", 1);
         request.onupgradeneeded = (e) => {
             db = e.target.result;
-            if (!db.objectStoreNames.contains("mcqs")) {
-                const store = db.createObjectStore("mcqs", { keyPath: "q" });
-                store.createIndex("topic", "topic", { unique: false });
-            }
+            if (!db.objectStoreNames.contains("mcqs")) { db.createObjectStore("mcqs", { keyPath: "q" }); }
         };
         request.onsuccess = (e) => { db = e.target.result; updateDBCount(); };
-
         function updateDBCount() {
             if(!db) return;
-            const tx = db.transaction("mcqs", "readonly");
-            const countReq = tx.objectStore("mcqs").count();
-            countReq.onsuccess = () => { document.getElementById("dbCount").innerText = countReq.result; };
+            db.transaction("mcqs", "readonly").objectStore("mcqs").count().onsuccess = (e) => { document.getElementById("dbCount").innerText = e.target.result; };
         }
-
         function saveToDB(mcqArray, topic) {
-            const tx = db.transaction("mcqs", "readwrite");
-            const store = tx.objectStore("mcqs");
+            const store = db.transaction("mcqs", "readwrite").objectStore("mcqs");
             mcqArray.forEach(mcq => { mcq.topic = topic; store.put(mcq); });
-            tx.oncomplete = () => { updateDBCount(); };
+            store.transaction.oncomplete = () => updateDBCount();
         }
 
-        // Llama 3.3 70B AI Call
-        async function callGroq(topic, diff) {
-            const apiKey = localStorage.getItem('aq_groq_key');
-            if (!apiKey) { alert("Please open Settings and enter your Groq API Key."); return null; }
-            const url = "https://api.groq.com/openai/v1/chat/completions";
-            const payload = {
-                model: "llama-3.3-70b-versatile",
-                messages: [
-                    { role: "system", content: "You are a clinical pharmacy educator. Generate 10 multiple choice questions. Output ONLY a valid JSON object. The JSON must contain a single root key called 'questions' which is an array of objects. Each object must have: 'q' (the question string), 'opts' (array of exactly 4 strings), 'ans' (integer 0-3 for correct index), and 'exp' (string explanation)." },
-                    { role: "user", content: `Topic: ${topic}. Difficulty: ${diff}. Output JSON object.` }
-                ],
-                response_format: { type: "json_object" }
-            };
-            try {
-                const response = await fetch(url, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                if (!response.ok) { const errorData = await response.json(); alert(`Groq API Error: ${errorData.error.message}`); return null; }
-                const data = await response.json(); return data.choices[0].message.content;
-            } catch (error) { alert("Network failed."); return null; }
-        }
+        document.getElementById('generateQuizBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('generateQuizBtn');
+            const topic = document.getElementById('quizTopic').value; const diff = document.getElementById('quizDiff').value;
+            const indicator = document.getElementById('quizModelIndicator');
+            
+            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating..."; 
+            btn.disabled = true;
+            indicator.style.display = "block";
+            
+            const sysPrompt = "You are a clinical educator. Generate exactly 5 MCQs. Output RAW JSON ONLY. No markdown. Format exactly: {\"questions\": [{\"q\":\"Question text\",\"opts\":[\"A\",\"B\",\"C\",\"D\"],\"ans\":0,\"exp\":\"Explanation\"}]}";
+            const rawText = await callOpenRouter(sysPrompt, `Topic: ${topic}, Level: ${diff}`, 'json', true); 
+            
+            if (rawText) {
+                try {
+                    const cleanText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+                    const parsed = JSON.parse(cleanText);
+                    const mcqArray = parsed.questions || parsed.Questions || [];
+                    if (mcqArray.length > 0) { saveToDB(mcqArray, topic); renderQuiz(mcqArray); } 
+                    else { throw new Error("No questions array"); }
+                } catch (e) { alert("AI format error. The free model sometimes struggles with strict JSON. Please try again!"); }
+            }
+            btn.innerHTML = "<i class='fa-solid fa-cloud-arrow-down'></i> Generate & Store 5 New MCQs"; 
+            btn.disabled = false;
+            indicator.style.display = "none";
+        });
 
         function renderQuiz(dataArray) {
             const container = document.getElementById('quizContainer');
             let htmlStr = '';
-            if(dataArray.length === 0) { container.innerHTML = "<p class='briefing-text'>No MCQs found. Generate some first!</p>"; return; }
             dataArray.forEach((item, index) => {
                 htmlStr += `<div class="quiz-card" data-ans="${item.ans}"><div class="quiz-q">Q${index + 1}. ${item.q}</div><div class="opts-container">`;
                 item.opts.forEach((opt, oIdx) => { htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`; });
@@ -306,34 +453,6 @@
             });
             container.innerHTML = htmlStr;
         }
-
-        document.getElementById('generateQuizBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('generateQuizBtn');
-            const topic = document.getElementById('quizTopic').value; const diff = document.getElementById('quizDiff').value;
-            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating (Llama 3.3)..."; btn.disabled = true;
-            const rawText = await callGroq(topic, diff); 
-            if (rawText) {
-                try {
-                    const parsed = JSON.parse(rawText);
-                    const mcqArray = parsed.questions || parsed.Questions || [];
-                    if (mcqArray.length > 0) { saveToDB(mcqArray, topic); renderQuiz(mcqArray.slice(0, 5)); } 
-                    else { throw new Error("No questions array found in JSON"); }
-                } catch (e) { alert("AI returned malformed data. Try again."); }
-            }
-            btn.innerHTML = "<i class='fa-solid fa-cloud-arrow-down'></i> Generate & Store 10 New MCQs"; btn.disabled = false;
-        });
-
-        document.getElementById('practiceQuizBtn').addEventListener('click', () => {
-            const topic = document.getElementById('quizTopic').value;
-            const tx = db.transaction("mcqs", "readonly");
-            const store = tx.objectStore("mcqs");
-            const request = store.getAll();
-            request.onsuccess = () => {
-                const allQs = request.result.filter(q => q.topic === topic);
-                const shuffled = allQs.sort(() => 0.5 - Math.random());
-                renderQuiz(shuffled.slice(0, 5));
-            };
-        });
 
         document.getElementById('quizContainer').addEventListener('click', (event) => {
             const optDiv = event.target.closest('.quiz-option');
@@ -346,95 +465,20 @@
             card.querySelector('.quiz-explanation').style.display = 'block';
         });
 
-        // SECTION 4: CAREER LOGIC
-        // Job Tracker
+        // JOB TRACKER
         function loadJobs() {
             const jobs = JSON.parse(localStorage.getItem('aq_jobs') || '[]');
-            const container = document.getElementById('jobList');
-            container.innerHTML = jobs.map(j => `<div class="job-card"><div class="badge-status">${j.status}</div><div class="job-title">${j.company}</div><div class="job-detail">${j.role} | ${j.date}</div></div>`).join('');
+            document.getElementById('jobList').innerHTML = jobs.map(j => `<div class="job-card"><div style="position:absolute; top:12px; right:12px; font-size:0.7rem;">${j.status}</div><div class="job-title">${j.company}</div><div class="job-detail">${j.role}</div></div>`).join('');
         }
         document.getElementById('addJobBtn').addEventListener('click', () => {
-            const comp = document.getElementById('jobCompany').value.trim();
-            const role = document.getElementById('jobRole').value.trim();
-            const status = document.getElementById('jobStatus').value;
-            if(!comp || !role) { alert("Enter company and role"); return; }
+            const comp = document.getElementById('jobCompany').value.trim(); const role = document.getElementById('jobRole').value.trim();
+            if(!comp) return;
             const jobs = JSON.parse(localStorage.getItem('aq_jobs') || '[]');
-            jobs.unshift({ company: comp, role: role, status: status, date: new Date().toLocaleDateString() });
+            jobs.unshift({ company: comp, role: role, status: document.getElementById('jobStatus').value });
             localStorage.setItem('aq_jobs', JSON.stringify(jobs));
-            document.getElementById('jobCompany').value = ''; document.getElementById('jobRole').value = '';
             loadJobs();
         });
         loadJobs();
-
-        // Naranjo Calculator
-        document.getElementById('calcNaranjoBtn').addEventListener('click', () => {
-            let score = 0;
-            for(let i=1; i<=5; i++) { score += parseInt(document.getElementById('n'+i).value); }
-            let cat = "Doubtful";
-            if (score >= 9) cat = "Definite"; else if (score >= 5) cat = "Probable"; else if (score >= 1) cat = "Possible";
-            const resBox = document.getElementById('naranjoResult');
-            resBox.innerHTML = `Score: ${score} <br> Causality: <span style="color:var(--gold-primary);">${cat}</span>`;
-            resBox.style.display = 'block';
-        });
-
-        // SOAP Portfolio
-        function loadPortfolio() {
-            const items = JSON.parse(localStorage.getItem('aq_portfolio') || '[]');
-            const container = document.getElementById('portfolioList');
-            container.innerHTML = items.map(i => `<div class="job-card" style="border-left-color:var(--success);"><div class="job-title">${i.title}</div><div class="job-detail">Type: SOAP Note | Date: ${i.date}</div></div>`).join('');
-        }
-        document.getElementById('saveSoapBtn').addEventListener('click', () => {
-            const title = document.getElementById('soapTitle').value.trim();
-            const s = document.getElementById('soapS').value.trim();
-            if(!title || !s) { alert("Enter at least a Title and Subjective notes"); return; }
-            const items = JSON.parse(localStorage.getItem('aq_portfolio') || '[]');
-            items.unshift({ title: title, s: s, o: document.getElementById('soapO').value, a: document.getElementById('soapA').value, p: document.getElementById('soapP').value, date: new Date().toLocaleDateString() });
-            localStorage.setItem('aq_portfolio', JSON.stringify(items));
-            ['soapTitle','soapS','soapO','soapA','soapP'].forEach(id => document.getElementById(id).value = '');
-            loadPortfolio();
-            alert("SOAP Note saved to offline portfolio!");
-        });
-        loadPortfolio();
-
-        // PK Calculators Logic
-        const calcData = {
-            crcl: '<input type="number" id="age" placeholder="Age (years)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="scr" placeholder="Serum Creatinine (mg/dL)" class="calc-in"><select id="sex" class="calc-in"><option value="m">Male</option><option value="f">Female</option></select>',
-            calcium: '<input type="number" id="ca" placeholder="Measured Calcium (mg/dL)" class="calc-in"><input type="number" id="alb" placeholder="Albumin (g/dL)" class="calc-in">',
-            loading: '<input type="number" id="vd" placeholder="Volume of Dist. (L/kg)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="targetCp" placeholder="Target Conc. (mg/L)" class="calc-in">',
-            bsa: '<input type="number" id="ht" placeholder="Height (cm)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in">',
-            infusion: '<input type="number" id="dose" placeholder="Dose (mg)" class="calc-in"><input type="number" id="vol" placeholder="Volume (mL)" class="calc-in"><input type="number" id="time" placeholder="Time (hours)" class="calc-in">'
-        };
-        const calcSelector = document.getElementById('calcSelector');
-        const calcInputs = document.getElementById('calcInputs');
-        if(calcSelector && calcInputs) {
-            calcInputs.innerHTML = calcData['crcl'];
-            calcSelector.addEventListener('change', (e) => {
-                calcInputs.innerHTML = calcData[e.target.value] || '';
-                document.getElementById('calcResult').style.display = 'none';
-            });
-        }
-        document.getElementById('runCalcBtn').addEventListener('click', () => {
-            const type = document.getElementById('calcSelector').value; const calcResult = document.getElementById('calcResult'); let resultText = "";
-            try {
-                if(type === 'crcl') {
-                    let age = parseFloat(document.getElementById('age').value); let wt = parseFloat(document.getElementById('wt').value); let scr = parseFloat(document.getElementById('scr').value); let sex = document.getElementById('sex').value;
-                    if(isNaN(age) || isNaN(wt) || isNaN(scr)) throw new Error(); let crcl = ((140 - age) * wt) / (72 * scr); if(sex === 'f') crcl *= 0.85; resultText = `CrCl: ${crcl.toFixed(2)} mL/min`;
-                } else if (type === 'calcium') {
-                    let ca = parseFloat(document.getElementById('ca').value); let alb = parseFloat(document.getElementById('alb').value);
-                    if(isNaN(ca) || isNaN(alb)) throw new Error(); let corr = ca + (0.8 * (4.0 - alb)); resultText = `Corrected Calcium: ${corr.toFixed(2)} mg/dL`;
-                } else if (type === 'loading') {
-                    let vd = parseFloat(document.getElementById('vd').value); let wt = parseFloat(document.getElementById('wt').value); let target = parseFloat(document.getElementById('targetCp').value);
-                    if(isNaN(vd) || isNaN(wt) || isNaN(target)) throw new Error(); let dose = vd * wt * target; resultText = `Loading Dose: ${dose.toFixed(2)} mg`;
-                } else if (type === 'bsa') {
-                    let ht = parseFloat(document.getElementById('ht').value); let wt = parseFloat(document.getElementById('wt').value);
-                    if(isNaN(ht) || isNaN(wt)) throw new Error(); let bsa = Math.sqrt((ht * wt) / 3600); let bmi = wt / Math.pow((ht/100), 2); resultText = `BSA: ${bsa.toFixed(2)} m² <br> BMI: ${bmi.toFixed(1)} kg/m²`;
-                } else if (type === 'infusion') {
-                    let dose = parseFloat(document.getElementById('dose').value); let vol = parseFloat(document.getElementById('vol').value); let time = parseFloat(document.getElementById('time').value);
-                    if(isNaN(dose) || isNaN(vol) || isNaN(time)) throw new Error(); let rate = vol / time; let conc = dose / vol; resultText = `Rate: ${rate.toFixed(1)} mL/hr <br> Concentration: ${conc.toFixed(2)} mg/mL`;
-                }
-                calcResult.innerHTML = resultText; calcResult.style.display = 'block';
-            } catch (err) { calcResult.innerHTML = "<span style='color: var(--danger);'>Please fill all fields correctly.</span>"; calcResult.style.display = 'block'; }
-        });
     </script>
 </body>
 </html>
