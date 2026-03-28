@@ -256,7 +256,9 @@
         }
         checkKeyStatus();
 
+        // ----------------------------------------------------
         // INDEXED-DB: THE SMART STORAGE (NO DUPLICATES)
+        // ----------------------------------------------------
         let db;
         const request = indexedDB.open("AequitasDB", 1);
         request.onupgradeneeded = (e) => {
@@ -310,18 +312,17 @@
         }
 
         // ----------------------------------------------------
-        // GEMINI AI DIRECT FETCH (Using v1 stable & gemini-1.5-flash)
+        // GEMINI AI DIRECT FETCH (REMOVED STRICT JSON CONFIG FOR SAFETY)
         // ----------------------------------------------------
         async function callGemini(prompt) {
             const apiKey = localStorage.getItem('aq_api_key');
             if (!apiKey) { alert("Please open Settings and enter your Gemini API Key first."); return null; }
 
-            // FIX: Using the v1 stable endpoint and the official 1.5-flash model
             const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             
+            // Removed the generationConfig block that was crashing the API
             const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { responseMimeType: "application/json" }
+                contents: [{ parts: [{ text: prompt }] }]
             };
 
             try {
@@ -349,6 +350,7 @@
             btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating 10 MCQs...";
             btn.disabled = true;
 
+            // Updated prompt to ensure proper raw output without the config
             const prompt = `You are a PharmD clinical pharmacy educator. Generate exactly 10 Multiple Choice Questions (MCQs) on: ${topic}. Difficulty level: ${diff}. 
             Return ONLY a raw JSON array of objects. Do NOT wrap the JSON in markdown blocks (no \`\`\`json). Each object must have exactly these keys: "q" (string, the question), "opts" (array of exactly 4 strings for options), "ans" (integer 0-3, index of correct option), and "exp" (string, clinical explanation).`;
 
@@ -356,12 +358,14 @@
             
             if (rawText) {
                 try {
+                    // This regex aggressively strips out any markdown the AI tries to add
                     rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
                     const data = JSON.parse(rawText);
                     saveToDB(data, topic);
                     renderQuiz(data.slice(0, 5)); // Show 5 immediately
                 } catch (e) {
                     alert("AI returned malformed data. Try again.");
+                    console.error("Parse Error:", e);
                 }
             }
             btn.innerHTML = "<i class='fa-solid fa-cloud-arrow-down'></i> Generate & Store 10 New MCQs";
