@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AEQUITAS CP PRO</title>
+    
+    <!-- Premium Fonts: Cormorant Garamond for headings, DM Sans for UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Puter.js AI Integration -->
+    <script src="https://js.puter.com/v2/"></script>
+
+    <style>
+        /* CORE DESIGN SYSTEM */
+        :root {
+            --bg-color: #050d1a;
+            --surface-color: #0d1f3c;
+            --gold-primary: #c9a84c;
+            --gold-glass: rgba(201, 168, 76, 0.15);
+            --text-main: #e8eaf0;
+            --text-muted: #8892a4;
+            --success: #2dd4a8;
+            --danger: #e05252;
+            --warning: #f0a32a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'DM Sans', sans-serif;
+            padding-bottom: 80px; /* Space for bottom nav */
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold-primary);
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(5, 13, 26, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gold-glass);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+        }
+
+        .auth-btn {
+            background: transparent;
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* SECTIONS & ANIMATIONS */
+        .app-section {
+            display: none;
+            padding: 20px;
+            animation: slideUp 0.3s ease-out forwards;
+        }
+
+        .app-section.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PREMIUM GLASS CARDS */
+        .glass-card {
+            background: var(--surface-color);
+            border: 1px solid var(--gold-glass);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: var(--gold-glass);
+            color: var(--gold-primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: var(--surface-color);
+            border-top: 1px solid var(--gold-glass);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            padding-bottom: env(safe-area-inset-bottom, 15px);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 60px;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 1.4rem;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item.active {
+            color: var(--gold-primary);
+        }
+
+        .nav-item.active i {
+            transform: scale(1.1);
+        }
+
+        /* PROGRESS BARS */
+        .progress-container {
+            margin-bottom: 15px;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            color: var(--text-muted);
+        }
+        .progress-track {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--gold-primary);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Header -->
+    <header>
+        <h1 class="logo">AEQUITAS <span style="font-family: 'DM Sans'; font-size: 1rem; color: var(--text-main); font-weight: 400;">PRO</span></h1>
+        <button class="auth-btn" id="puterAuthBtn" onclick="handleAuth()">Sign In</button>
+    </header>
+
+    <!-- SECTION 1: COMMAND CENTER (Dashboard) -->
+    <section id="dashboard" class="app-section active">
+        <div class="phase-badge">PHASE 1: FOUNDATION (DAY 1)</div>
+        
+        <!-- Track Health -->
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-chart-line"></i> Career Track Health</h2>
+            
+            <div class="progress-container">
+                <div class="progress-label"><span>Clinical Pharmacy</span><span>10%</span></div>
+                <div class="progress-track"><div class="progress-fill" style="width: 10%; background: var(--success);"></div></div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label"><span>Pharmacovigilance (CRO)</span><span>15%</span></div>
+                <div class="progress-track"><div class="progress-fill" style="width: 15%;"></div></div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label"><span>Medical Writing</span><span>5%</span></div>
+                <div class="progress-track"><div class="progress-fill" style="width: 5%; background: var(--warning);"></div></div>
+            </div>
+        </div>
+
+        <!-- Daily Intelligence Briefing -->
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-bolt"></i> Daily Briefing</h2>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">
+                <strong>Clinical Pearl:</strong> Never give IV calcium and IV sodium bicarbonate in the same line—they precipitate immediately. Flush the line first.
+            </p>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">
+                <strong>Action:</strong> Check TS Pharmacy Council registration status today.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 2: 90-DAY CALENDAR (Placeholder for now) -->
+    <section id="calendar" class="app-section">
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-calendar-check"></i> War Calendar</h2>
+            <p style="color: var(--text-muted);">90-Day phased task engine will load here.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 3: KNOWLEDGE ENGINE (Placeholder) -->
+    <section id="knowledge" class="app-section">
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-book-medical"></i> Knowledge Base</h2>
+            <p style="color: var(--text-muted);">10 Modules & PK Calculators will load here.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 4: JOB WAR ROOM (Placeholder) -->
+    <section id="career" class="app-section">
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-briefcase"></i> Job War Room</h2>
+            <p style="color: var(--text-muted);">Hyderabad Hospital & CRO tracker will load here.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 36: IELTS MASTERCLASS (Placeholder) -->
+    <section id="ielts" class="app-section">
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-earth-americas"></i> IELTS Band 9</h2>
+            <p style="color: var(--text-muted);">AI English Evaluator & Speaking Simulator will load here.</p>
+        </div>
+    </section>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('dashboard', this)">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Command</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('calendar', this)">
+            <i class="fa-solid fa-calendar-day"></i>
+            <span>Calendar</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('knowledge', this)">
+            <i class="fa-solid fa-brain"></i>
+            <span>Learn</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('career', this)">
+            <i class="fa-solid fa-crosshairs"></i>
+            <span>Career</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('ielts', this)">
+            <i class="fa-solid fa-language"></i>
+            <span>IELTS</span>
+        </div>
+    </nav>
+
+    <!-- CORE LOGIC & DATABASE ARCHITECTURE -->
+    <script>
+        // 1. Navigation Logic
+        function switchTab(sectionId, element) {
+            // Hide all sections
+            document.querySelectorAll('.app-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update nav styling
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // Haptic feedback (works on some Androids in PWA mode)
+            if (navigator.vibrate) { navigator.vibrate(50); }
+        }
+
+        // 2. Puter.js Authentication Flow
+        async function checkAuthState() {
+            try {
+                const isSignedIn = puter.auth.isSignedIn();
+                const btn = document.getElementById('puterAuthBtn');
+                
+                if (isSignedIn) {
+                    const user = await puter.auth.getUser();
+                    btn.textContent = "AI Ready";
+                    btn.style.borderColor = "var(--success)";
+                    btn.style.color = "var(--success)";
+                } else {
+                    btn.textContent = "Sign In (AI)";
+                }
+            } catch (error) {
+                console.error("Puter auth check failed:", error);
+            }
+        }
+
+        async function handleAuth() {
+            const btn = document.getElementById('puterAuthBtn');
+            const originalText = btn.textContent;
+            btn.textContent = "Connecting...";
+            
+            try {
+                if (!puter.auth.isSignedIn()) {
+                    // Detect if running locally in TrebEdit
+                    if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                        alert("Note: Puter Sign-In is blocked by mobile code editors for security reasons. It will freeze here. Please test Sign-In on your live GitHub link!");
+                        btn.textContent = originalText;
+                        return; // Stop the freeze
+                    }
+                    await puter.auth.signIn();
+                    checkAuthState();
+                } else {
+                    alert("You are already authenticated and ready to use AI features.");
+                    checkAuthState();
+                }
+            } catch (error) {
+                console.error("Auth error:", error);
+                btn.textContent = originalText;
+            }
+        }
+        
+
+        // 3. Database Manager (IndexedDB Skeleton - Prevents future crashes)
+        class DBManager {
+            constructor() {
+                this.dbName = 'AequitasDB';
+                this.version = 1;
+                this.db = null;
+                this.ready = this.init();
+            }
+
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.version);
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        // We will add object stores (ai_content, portfolio, etc.) here in Session 2 & 3
+                        if (!db.objectStoreNames.contains('ai_content')) {
+                            db.createObjectStore('ai_content', { keyPath: 'id', autoIncrement: true });
+                        }
+                    };
+
+                    request.onsuccess = (event) => {
+                        this.db = event.target.result;
+                        console.log("Database initialized successfully.");
+                        resolve(true);
+                    };
+
+                    request.onerror = (event) => {
+                        console.error("Database error:", event.target.error);
+                        reject(event.target.error);
+                    };
+                });
+            }
+        }
+
+        // Initialize DB on startup
+        const appDB = new DBManager();
+
+        // Run on load
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuthState();
+        });
+    </script>
+</body>
+</html>
