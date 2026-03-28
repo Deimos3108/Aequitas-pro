@@ -238,15 +238,76 @@
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-calendar-check"></i> War Calendar</h2>
             <p style="color: var(--text-muted);">90-Day phased task engine will load here.</p>
-        </div>
+        </div>            
     </section>
 
-    <!-- SECTION 3: KNOWLEDGE ENGINE (Placeholder) -->
+        <!-- SECTION 3: KNOWLEDGE ENGINE & CALCULATORS -->
     <section id="knowledge" class="app-section">
+        <div class="phase-badge">CLINICAL ARSENAL</div>
+
+        <!-- PK Calculators -->
         <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-book-medical"></i> Knowledge Base</h2>
-            <p style="color: var(--text-muted);">10 Modules & PK Calculators will load here.</p>
+            <h2 class="card-header"><i class="fa-solid fa-calculator"></i> PK Calculators</h2>
+            
+            <select id="calcSelector" style="width: 100%; padding: 10px; margin-bottom: 15px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--gold-primary); border-radius: 8px; font-family: 'DM Sans';">
+                <option value="crcl">1. Creatinine Clearance (Cockcroft-Gault)</option>
+                <option value="calcium">2. Corrected Calcium</option>
+                <option value="loading">3. Loading Dose</option>
+                <option value="bsa">4. Body Surface Area (BSA) & BMI</option>
+                <option value="infusion">5. IV Infusion Rate</option>
+                <option value="vanco" disabled>6. Vancomycin AUC (Coming Soon)</option>
+                <option value="pheny" disabled>7. Phenytoin Adjustment (Coming Soon)</option>
+            </select>
+
+            <div id="calcInputs" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+                <!-- Inputs injected via JS -->
+            </div>
+
+            <button onclick="runCalculator()" style="width: 100%; padding: 12px; background: var(--gold-primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer;">Calculate</button>
+            
+            <div id="calcResult" style="margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-weight: bold;">
+                <!-- Result injected here -->
+            </div>
         </div>
+
+        <!-- The 10 Knowledge Modules -->
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-book-medical"></i> 10 Core Modules</h2>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>1. Systemic Pharmacology</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>2. Pharmacotherapeutics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>3. Clinical Pharmacy Practice</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>4. Drug Interactions</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>5. Pharmacokinetics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>6. Critical Care Pharmacy</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>7. Evidence-Based Medicine</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>8. Special Populations</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>9. Pharmacovigilance (PV)</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>10. Medical/Regulatory Writing</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     </section>
 
     <!-- SECTION 4: JOB WAR ROOM (Placeholder) -->
@@ -326,9 +387,7 @@
                 }
             } catch (error) {
                 console.error("Puter auth check failed:", error);
-            }
-        }
-
+            
         async function handleAuth() {
             const btn = document.getElementById('puterAuthBtn');
             const originalText = btn.textContent;
@@ -353,6 +412,7 @@
                 btn.textContent = originalText;
             }
         }
+                      }
         
 
         // 3. Database Manager (IndexedDB Skeleton - Prevents future crashes)
@@ -397,6 +457,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             checkAuthState();
         });
-    </script>
-</body>
-</html>
+                // --- SECTION 2: PK CALCULATOR LOGIC ---
+        const calcData = {
+            crcl: { html: '<input type="number" id="age" placeholder="Age (years)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="scr" placeholder="Serum Creat
