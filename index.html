@@ -264,7 +264,6 @@
         request.onupgradeneeded = (e) => {
             db = e.target.result;
             if (!db.objectStoreNames.contains("mcqs")) {
-                // We use the question string ('q') as the unique key to prevent duplicates
                 const store = db.createObjectStore("mcqs", { keyPath: "q" });
                 store.createIndex("topic", "topic", { unique: false });
             }
@@ -287,12 +286,10 @@
             let added = 0;
             mcqArray.forEach(mcq => {
                 mcq.topic = topic; 
-                const req = store.put(mcq); // put overwrites duplicates safely based on question text
+                const req = store.put(mcq); // put overwrites duplicates based on question string
                 req.onsuccess = () => added++;
             });
-            tx.oncomplete = () => {
-                updateDBCount();
-            };
+            tx.oncomplete = () => { updateDBCount(); };
         }
 
         function renderQuiz(dataArray) {
@@ -315,18 +312,16 @@
         }
 
         // ----------------------------------------------------
-        // GEMINI AI DIRECT FETCH (Using gemini-1.5-pro-latest)
+        // GEMINI AI DIRECT FETCH (Using gemini-pro - universally supported fallback)
         // ----------------------------------------------------
         async function callGemini(prompt) {
             const apiKey = localStorage.getItem('aq_api_key');
             if (!apiKey) { alert("Please open Settings and enter your Gemini API Key first."); return null; }
 
-            // Using the pro model to avoid the "model not found" error on basic accounts
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
             
             const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { responseMimeType: "application/json" }
+                contents: [{ parts: [{ text: prompt }] }]
             };
 
             try {
@@ -355,12 +350,14 @@
             btn.disabled = true;
 
             const prompt = `You are a PharmD clinical pharmacy educator. Generate exactly 10 Multiple Choice Questions (MCQs) on: ${topic}. Difficulty level: ${diff}. 
-            Return a JSON array of objects. Each object must have exactly these keys: "q" (string, the question), "opts" (array of exactly 4 strings for options), "ans" (integer 0-3, index of correct option), and "exp" (string, clinical explanation). Ensure strict JSON formatting.`;
+            Return ONLY a raw JSON array of objects. Do NOT wrap the JSON in markdown blocks (no \`\`\`json). Each object must have exactly these keys: "q" (string, the question), "opts" (array of exactly 4 strings for options), "ans" (integer 0-3, index of correct option), and "exp" (string, clinical explanation).`;
 
-            const rawText = await callGemini(prompt); 
+            let rawText = await callGemini(prompt); 
             
             if (rawText) {
                 try {
+                    // Auto-cleaner for rogue markdown if AI ignores instructions
+                    rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
                     const data = JSON.parse(rawText);
                     saveToDB(data, topic);
                     renderQuiz(data.slice(0, 5)); // Show 5 immediately
@@ -381,9 +378,7 @@
             
             request.onsuccess = () => {
                 const allQs = request.result.filter(q => q.topic === topic);
-                // Shuffle array
                 const shuffled = allQs.sort(() => 0.5 - Math.random());
-                // Get sub-array of first 5 elements
                 let selected = shuffled.slice(0, 5);
                 renderQuiz(selected);
             };
