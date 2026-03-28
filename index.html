@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AEQUITAS CP PRO</title>
+    <!-- Version tag added to FORCE your browser to clear its cache -->
+    <title>AEQUITAS CP PRO v2</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* CORE DESIGN SYSTEM & VARIABLES */
         :root {
             --bg-color: #050d1a; --surface-color: #0d1f3c; --gold-primary: #c9a84c;
             --gold-glass: rgba(201, 168, 76, 0.15); --text-main: #e8eaf0; --text-muted: #8892a4;
@@ -22,14 +22,12 @@
         body { background-color: var(--bg-color); color: var(--text-main); font-family: 'DM Sans', sans-serif; padding-bottom: var(--spacing-bottom-nav); overflow-x: hidden; }
         h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--gold-primary); }
 
-        /* HEADER */
         header { display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-main); background: rgba(5, 13, 26, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--gold-glass); position: sticky; top: 0; z-index: var(--z-header); }
         .logo { font-size: 1.4rem; letter-spacing: 1px; }
         .logo-span { font-family: 'DM Sans'; font-size: 1rem; color: var(--text-main); font-weight: 400; }
         .settings-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); padding: 8px 16px; border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
         .settings-btn.ready { border-color: var(--success); color: var(--success); }
 
-        /* SECTIONS & CARDS */
         .app-section { display: none; padding: var(--spacing-main); animation: slideUp 0.3s ease-out forwards; }
         .app-section.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -44,7 +42,6 @@
         [data-status="placeholder"] .glass-card { opacity: 0.8; }
         .status-badge { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; background: var(--warning); color: var(--bg-color); padding: 4px 8px; border-radius: 4px; margin-left: auto; font-weight: bold; text-transform: uppercase; }
 
-        /* NAVIGATION */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--surface-color); border-top: 1px solid var(--gold-glass); display: flex; justify-content: space-around; padding: var(--spacing-small) 0; padding-bottom: env(safe-area-inset-bottom, 15px); z-index: var(--z-bottom-nav); }
         .nav-item { color: var(--text-muted); text-align: center; font-size: 0.75rem; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 60px; cursor: pointer; transition: color 0.2s ease; }
         .nav-item i { font-size: var(--nav-icon-size); pointer-events: none; }
@@ -52,14 +49,12 @@
         .nav-item.active { color: var(--gold-primary); }
         .nav-item.active i { transform: scale(1.1); }
 
-        /* UI COMPONENTS */
         .calc-select, .calc-in, .api-input { width: 100%; padding: var(--spacing-small); margin-bottom: 15px; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--gold-primary); border-radius: 8px; font-family: 'DM Sans'; outline: none; }
         .action-btn { width: 100%; padding: 12px; background: var(--gold-primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 5px; transition: opacity 0.2s; }
         .action-btn.secondary { background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary); margin-bottom: 15px;}
         .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .result-box { margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-weight: bold; line-height: 1.5; }
         
-        /* QUIZ SYSTEM */
         .db-stats { display: flex; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; border: 1px solid var(--text-muted); }
         .quiz-card { background: rgba(255,255,255,0.03); border: 1px solid var(--gold-glass); border-radius: 8px; padding: 15px; margin-top: 15px; }
         .quiz-q { font-weight: 600; margin-bottom: 12px; color: var(--gold-primary); line-height: 1.4; font-size: 0.95rem; }
@@ -69,12 +64,10 @@
         .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
         .quiz-explanation { margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 0.85rem; display: none; border-left: 3px solid var(--success); }
 
-        /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--surface-color); border: 1px solid var(--gold-primary); border-radius: 12px; padding: 20px; width: 100%; max-width: 400px; }
         
-        /* JOB WAR ROOM & KNOWLEDGE GRID */
         .job-card { background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold-primary); padding: 12px; margin-bottom: 10px; border-radius: 4px; }
         .job-title { font-weight: bold; color: var(--text-main); font-size: 1rem; }
         .job-detail { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
@@ -89,18 +82,16 @@
         <button class="settings-btn" id="openSettingsBtn"><i class="fa-solid fa-gear"></i> Settings</button>
     </header>
 
-    <!-- SETTINGS MODAL -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-content">
-            <h2 style="margin-bottom: 15px;">AI Configuration</h2>
-            <p class="briefing-text">Paste your free Google Gemini API key here.</p>
-            <input type="password" id="apiKeyInput" class="api-input" placeholder="AIzaSy...">
+            <h2 style="margin-bottom: 15px;">Groq AI Config</h2>
+            <p class="briefing-text">Paste your free Groq API key (Starts with gsk_). Using Llama-3-8B model.</p>
+            <input type="password" id="apiKeyInput" class="api-input" placeholder="gsk_...">
             <button class="action-btn" id="saveKeyBtn">Save Key</button>
             <button class="action-btn" id="closeSettingsBtn" style="background: transparent; color: var(--text-main); border: 1px solid var(--text-muted); margin-top: 10px;">Close</button>
         </div>
     </div>
 
-    <!-- SECTION 1: COMMAND CENTER -->
     <section id="dashboard" class="app-section active">
         <div class="phase-badge">PHASE 1: FOUNDATION</div>
         <div class="glass-card">
@@ -111,7 +102,6 @@
         </div>
     </section>
 
-    <!-- SECTION 2: CALENDAR -->
     <section id="calendar" class="app-section" data-status="placeholder">
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-calendar-check"></i> War Calendar <span class="status-badge">In Dev</span></h2>
@@ -119,18 +109,14 @@
         </div>
     </section>
 
-    <!-- SECTION 3: KNOWLEDGE ENGINE -->
     <section id="knowledge" class="app-section">
         <div class="phase-badge">CLINICAL ARSENAL</div>
 
-        <!-- AI QUIZ ENGINE WITH DATABASE STORAGE -->
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-robot"></i> Smart Quiz Bank</h2>
-            
             <div class="db-stats">
                 <span><i class="fa-solid fa-database"></i> Local Bank: <strong id="dbCount" style="color: var(--success);">0</strong> MCQs</span>
             </div>
-
             <select id="quizTopic" class="calc-select">
                 <option value="Cardiovascular Pharmacology (HTN, HF, Arrhythmias)">Cardiovascular</option>
                 <option value="Endocrine Pharmacology (Diabetes & Thyroid)">Endocrinology</option>
@@ -140,20 +126,18 @@
                 <option value="Beginner Pharmacy Student">Beginner</option>
                 <option value="Clinical Exam Level">Exam Level</option>
             </select>
-            
             <button id="practiceQuizBtn" class="action-btn secondary"><i class="fa-solid fa-play"></i> Practice Random 3 (Offline)</button>
             <button id="generateQuizBtn" class="action-btn"><i class="fa-solid fa-cloud-arrow-down"></i> Generate & Store 10 New MCQs</button>
-            
             <div id="quizContainer"></div>
         </div>
 
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-calculator"></i> PK Calculators</h2>
             <select id="calcSelector" class="calc-select">
-                <option value="crcl">1. Creatinine Clearance (Cockcroft-Gault)</option>
+                <option value="crcl">1. Creatinine Clearance</option>
                 <option value="calcium">2. Corrected Calcium</option>
                 <option value="loading">3. Loading Dose</option>
-                <option value="bsa">4. Body Surface Area (BSA) & BMI</option>
+                <option value="bsa">4. BSA & BMI</option>
                 <option value="infusion">5. IV Infusion Rate</option>
             </select>
             <div id="calcInputs"></div>
@@ -167,42 +151,19 @@
                 <div class="module-item"><span>1. Systemic Pharmacology</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
                 <div class="module-item"><span>2. Pharmacotherapeutics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
                 <div class="module-item"><span>3. Clinical Pharmacy Practice</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-                <div class="module-item"><span>4. Drug Interactions</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-                <div class="module-item"><span>5. Pharmacokinetics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 4: CAREER (JOB WAR ROOM) -->
     <section id="career" class="app-section">
         <div class="phase-badge">HYDERABAD JOB WAR ROOM</div>
-        
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-hospital"></i> Clinical Pharmacy</h2>
-            <div class="job-card">
-                <div class="job-title">Apollo Hospitals (Jubilee Hills)</div>
-                <div class="job-detail"><strong>Role:</strong> Clinical Pharmacist</div>
-            </div>
-            <div class="job-card">
-                <div class="job-title">Yashoda Hospitals</div>
-                <div class="job-detail"><strong>Role:</strong> Ward Pharmacist</div>
-            </div>
-        </div>
-
-        <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-shield-virus"></i> Pharmacovigilance (CROs)</h2>
-            <div class="job-card" style="border-left-color: var(--success);">
-                <div class="job-title">Syneos Health (HITEC City)</div>
-                <div class="job-detail"><strong>Role:</strong> Global Safety Associate</div>
-            </div>
-            <div class="job-card">
-                <div class="job-title">Parexel (HITEC City)</div>
-                <div class="job-detail"><strong>Role:</strong> PV Associate</div>
-            </div>
+            <div class="job-card"><div class="job-title">Apollo Hospitals</div><div class="job-detail"><strong>Role:</strong> Clinical Pharmacist</div></div>
+            <div class="job-card"><div class="job-title">Yashoda Hospitals</div><div class="job-detail"><strong>Role:</strong> Ward Pharmacist</div></div>
         </div>
     </section>
 
-    <!-- SECTION 36: IELTS -->
     <section id="ielts" class="app-section" data-status="placeholder">
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-earth-americas"></i> IELTS Band 9 <span class="status-badge">In Dev</span></h2>
@@ -210,7 +171,6 @@
         </div>
     </section>
 
-    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav" id="mainNav">
         <div class="nav-item active" data-section="dashboard"><i class="fa-solid fa-shield-halved"></i><span>Command</span></div>
         <div class="nav-item" data-section="calendar"><i class="fa-solid fa-calendar-day"></i><span>Calendar</span></div>
@@ -220,7 +180,6 @@
     </nav>
 
     <script>
-        // NAVIGATION LOGIC
         document.getElementById('mainNav').addEventListener('click', (event) => {
             const navItem = event.target.closest('.nav-item');
             if (!navItem) return;
@@ -229,36 +188,32 @@
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             navItem.classList.add('active');
-            if (navigator.vibrate) { navigator.vibrate(50); }
+            if (navigator.vibrate) navigator.vibrate(50);
         });
 
-        // SETTINGS / API KEY LOGIC
         const settingsModal = document.getElementById('settingsModal');
         const apiKeyInput = document.getElementById('apiKeyInput');
         const settingsBtn = document.getElementById('openSettingsBtn');
 
         document.getElementById('openSettingsBtn').addEventListener('click', () => {
-            apiKeyInput.value = localStorage.getItem('aq_api_key') || '';
+            apiKeyInput.value = localStorage.getItem('aq_groq_key') || '';
             settingsModal.classList.add('active');
         });
         document.getElementById('closeSettingsBtn').addEventListener('click', () => settingsModal.classList.remove('active'));
         document.getElementById('saveKeyBtn').addEventListener('click', () => {
             const key = apiKeyInput.value.trim();
-            if (key) { localStorage.setItem('aq_api_key', key); checkKeyStatus(); settingsModal.classList.remove('active'); } 
+            if (key) { localStorage.setItem('aq_groq_key', key); checkKeyStatus(); settingsModal.classList.remove('active'); } 
             else { alert("Please enter a valid key."); }
         });
 
         function checkKeyStatus() {
-            if (localStorage.getItem('aq_api_key')) {
+            if (localStorage.getItem('aq_groq_key')) {
                 settingsBtn.classList.add('ready');
-                settingsBtn.innerHTML = '<i class="fa-solid fa-check"></i> AI Ready';
+                settingsBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> AI Ready';
             }
         }
         checkKeyStatus();
 
-        // ----------------------------------------------------
-        // INDEXED-DB: THE SMART STORAGE (NO DUPLICATES)
-        // ----------------------------------------------------
         let db;
         const request = indexedDB.open("AequitasDB", 1);
         request.onupgradeneeded = (e) => {
@@ -268,10 +223,7 @@
                 store.createIndex("topic", "topic", { unique: false });
             }
         };
-        request.onsuccess = (e) => { 
-            db = e.target.result; 
-            updateDBCount(); 
-        };
+        request.onsuccess = (e) => { db = e.target.result; updateDBCount(); };
 
         function updateDBCount() {
             if(!db) return;
@@ -283,12 +235,7 @@
         function saveToDB(mcqArray, topic) {
             const tx = db.transaction("mcqs", "readwrite");
             const store = tx.objectStore("mcqs");
-            let added = 0;
-            mcqArray.forEach(mcq => {
-                mcq.topic = topic; 
-                const req = store.put(mcq); 
-                req.onsuccess = () => added++;
-            });
+            mcqArray.forEach(mcq => { mcq.topic = topic; store.put(mcq); });
             tx.oncomplete = () => { updateDBCount(); };
         }
 
@@ -296,133 +243,119 @@
             const container = document.getElementById('quizContainer');
             let htmlStr = '';
             if(dataArray.length === 0) {
-                container.innerHTML = "<p class='briefing-text'>No MCQs found. Generate some first!</p>";
-                return;
+                container.innerHTML = "<p class='briefing-text'>No MCQs found. Generate some first!</p>"; return;
             }
             dataArray.forEach((item, index) => {
                 htmlStr += `<div class="quiz-card" data-ans="${item.ans}">
-                    <div class="quiz-q">Q${index + 1}. ${item.q}</div>
-                    <div class="opts-container">`;
-                item.opts.forEach((opt, oIdx) => {
-                    htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`;
-                });
+                    <div class="quiz-q">Q${index + 1}. ${item.q}</div><div class="opts-container">`;
+                item.opts.forEach((opt, oIdx) => { htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`; });
                 htmlStr += `</div><div class="quiz-explanation"><strong>Explanation:</strong> ${item.exp}</div></div>`;
             });
             container.innerHTML = htmlStr;
         }
 
-        // ----------------------------------------------------
-        // GEMINI AI DIRECT FETCH (REMOVED STRICT JSON CONFIG FOR SAFETY)
-        // ----------------------------------------------------
-        async function callGemini(prompt) {
-            const apiKey = localStorage.getItem('aq_api_key');
-            if (!apiKey) { alert("Please open Settings and enter your Gemini API Key first."); return null; }
+        // --- NEW GROQ AI INTEGRATION (Llama 3 8B) ---
+        async function callGroq(topic, diff) {
+            const apiKey = localStorage.getItem('aq_groq_key');
+            if (!apiKey) { alert("Please open Settings and enter your Groq API Key."); return null; }
 
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-            
-            // Removed the generationConfig block that was crashing the API
+            const url = "https://api.groq.com/openai/v1/chat/completions";
             const payload = {
-                contents: [{ parts: [{ text: prompt }] }]
+                model: "llama3-8b-8192",
+                messages: [
+                    { role: "system", content: "You are a clinical pharmacy educator. Generate 10 multiple choice questions. Output ONLY a valid JSON object. The JSON must contain a single root key called 'questions' which is an array of objects. Each object must have: 'q' (the question string), 'opts' (array of exactly 4 strings), 'ans' (integer 0-3 for correct index), and 'exp' (string explanation)." },
+                    { role: "user", content: `Topic: ${topic}. Difficulty: ${diff}. Output JSON object.` }
+                ],
+                response_format: { type: "json_object" }
             };
 
             try {
-                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    alert(`Google API Error: ${errorData.error ? errorData.error.message : "Unknown"}`);
+                    alert(`Groq API Error: ${errorData.error.message}`);
                     return null;
                 }
                 const data = await response.json();
-                return data.candidates[0].content.parts[0].text;
+                return data.choices[0].message.content;
             } catch (error) {
-                alert("Network failed. Please verify your internet connection.");
-                return null;
+                alert("Network failed."); return null;
             }
         }
 
-        // GENERATE & STORE
         document.getElementById('generateQuizBtn').addEventListener('click', async () => {
             const btn = document.getElementById('generateQuizBtn');
             const topic = document.getElementById('quizTopic').value;
             const diff = document.getElementById('quizDiff').value;
             
-            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating 10 MCQs...";
+            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating (Llama 3)...";
             btn.disabled = true;
 
-            // Updated prompt to ensure proper raw output without the config
-            const prompt = `You are a PharmD clinical pharmacy educator. Generate exactly 10 Multiple Choice Questions (MCQs) on: ${topic}. Difficulty level: ${diff}. 
-            Return ONLY a raw JSON array of objects. Do NOT wrap the JSON in markdown blocks (no \`\`\`json). Each object must have exactly these keys: "q" (string, the question), "opts" (array of exactly 4 strings for options), "ans" (integer 0-3, index of correct option), and "exp" (string, clinical explanation).`;
-
-            let rawText = await callGemini(prompt); 
+            const rawText = await callGroq(topic, diff); 
             
             if (rawText) {
                 try {
-                    // This regex aggressively strips out any markdown the AI tries to add
-                    rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
-                    const data = JSON.parse(rawText);
-                    saveToDB(data, topic);
-                    renderQuiz(data.slice(0, 5)); // Show 5 immediately
+                    const parsed = JSON.parse(rawText);
+                    const mcqArray = parsed.questions || parsed.Questions || [];
+                    if (mcqArray.length > 0) {
+                        saveToDB(mcqArray, topic);
+                        renderQuiz(mcqArray.slice(0, 5));
+                    } else { throw new Error("No questions array found in JSON"); }
                 } catch (e) {
                     alert("AI returned malformed data. Try again.");
-                    console.error("Parse Error:", e);
+                    console.error(e);
                 }
             }
             btn.innerHTML = "<i class='fa-solid fa-cloud-arrow-down'></i> Generate & Store 10 New MCQs";
             btn.disabled = false;
         });
 
-        // PRACTICE FROM LOCAL BANK (OFFLINE)
         document.getElementById('practiceQuizBtn').addEventListener('click', () => {
             const topic = document.getElementById('quizTopic').value;
             const tx = db.transaction("mcqs", "readonly");
             const store = tx.objectStore("mcqs");
             const request = store.getAll();
-            
             request.onsuccess = () => {
                 const allQs = request.result.filter(q => q.topic === topic);
                 const shuffled = allQs.sort(() => 0.5 - Math.random());
-                let selected = shuffled.slice(0, 5);
-                renderQuiz(selected);
+                renderQuiz(shuffled.slice(0, 5));
             };
         });
 
-        // EVENT DELEGATION: Quiz Option Click Logic
         document.getElementById('quizContainer').addEventListener('click', (event) => {
             const optDiv = event.target.closest('.quiz-option');
             if (!optDiv) return;
-
             const optsContainer = optDiv.parentElement;
             const card = optsContainer.parentElement;
             const correctIdx = parseInt(card.dataset.ans);
             const clickedIdx = parseInt(optDiv.dataset.idx);
 
             optsContainer.querySelectorAll('.quiz-option').forEach(el => el.classList.add('disabled'));
-
-            if (clickedIdx === correctIdx) {
-                optDiv.classList.add('correct');
-            } else {
-                optDiv.classList.add('incorrect');
-                optsContainer.children[correctIdx].classList.add('correct'); 
-            }
+            if (clickedIdx === correctIdx) optDiv.classList.add('correct');
+            else { optDiv.classList.add('incorrect'); optsContainer.children[correctIdx].classList.add('correct'); }
             card.querySelector('.quiz-explanation').style.display = 'block';
         });
 
-        // CALCULATOR LOGIC
+        // Calculators
         const calcData = {
-            crcl: { html: '<input type="number" id="age" placeholder="Age (years)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="scr" placeholder="Serum Creatinine (mg/dL)" class="calc-in"><select id="sex" class="calc-in"><option value="m">Male</option><option value="f">Female</option></select>' },
-            calcium: { html: '<input type="number" id="ca" placeholder="Measured Calcium (mg/dL)" class="calc-in"><input type="number" id="alb" placeholder="Albumin (g/dL)" class="calc-in">' },
-            loading: { html: '<input type="number" id="vd" placeholder="Volume of Dist. (L/kg)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="targetCp" placeholder="Target Conc. (mg/L)" class="calc-in">' },
-            bsa: { html: '<input type="number" id="ht" placeholder="Height (cm)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in">' },
-            infusion: { html: '<input type="number" id="dose" placeholder="Dose (mg)" class="calc-in"><input type="number" id="vol" placeholder="Volume (mL)" class="calc-in"><input type="number" id="time" placeholder="Time (hours)" class="calc-in">' }
+            crcl: '<input type="number" id="age" placeholder="Age (years)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="scr" placeholder="Serum Creatinine (mg/dL)" class="calc-in"><select id="sex" class="calc-in"><option value="m">Male</option><option value="f">Female</option></select>',
+            calcium: '<input type="number" id="ca" placeholder="Measured Calcium (mg/dL)" class="calc-in"><input type="number" id="alb" placeholder="Albumin (g/dL)" class="calc-in">',
+            loading: '<input type="number" id="vd" placeholder="Volume of Dist. (L/kg)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="targetCp" placeholder="Target Conc. (mg/L)" class="calc-in">',
+            bsa: '<input type="number" id="ht" placeholder="Height (cm)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in">',
+            infusion: '<input type="number" id="dose" placeholder="Dose (mg)" class="calc-in"><input type="number" id="vol" placeholder="Volume (mL)" class="calc-in"><input type="number" id="time" placeholder="Time (hours)" class="calc-in">'
         };
 
         const calcSelector = document.getElementById('calcSelector');
         const calcInputs = document.getElementById('calcInputs');
         if(calcSelector && calcInputs) {
-            calcInputs.innerHTML = calcData['crcl'].html;
+            calcInputs.innerHTML = calcData['crcl'];
             calcSelector.addEventListener('change', (e) => {
-                calcInputs.innerHTML = calcData[e.target.value] ? calcData[e.target.value].html : '';
+                calcInputs.innerHTML = calcData[e.target.value] || '';
                 document.getElementById('calcResult').style.display = 'none';
             });
         }
