@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- Version tag added to FORCE your browser to clear its cache -->
-    <title>AEQUITAS CP PRO v2</title>
+    <title>AEQUITAS CP PRO v2.1</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -85,7 +84,7 @@
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-content">
             <h2 style="margin-bottom: 15px;">Groq AI Config</h2>
-            <p class="briefing-text">Paste your free Groq API key (Starts with gsk_). Using Llama-3-8B model.</p>
+            <p class="briefing-text">Paste your free Groq API key (Starts with gsk_). Powered by Llama-3.3.</p>
             <input type="password" id="apiKeyInput" class="api-input" placeholder="gsk_...">
             <button class="action-btn" id="saveKeyBtn">Save Key</button>
             <button class="action-btn" id="closeSettingsBtn" style="background: transparent; color: var(--text-main); border: 1px solid var(--text-muted); margin-top: 10px;">Close</button>
@@ -254,14 +253,14 @@
             container.innerHTML = htmlStr;
         }
 
-        // --- NEW GROQ AI INTEGRATION (Llama 3 8B) ---
+        // --- NEW GROQ AI INTEGRATION (Llama 3.3 70B) ---
         async function callGroq(topic, diff) {
             const apiKey = localStorage.getItem('aq_groq_key');
             if (!apiKey) { alert("Please open Settings and enter your Groq API Key."); return null; }
 
             const url = "https://api.groq.com/openai/v1/chat/completions";
             const payload = {
-                model: "llama3-8b-8192",
+                model: "llama-3.3-70b-versatile", // UPDATED TO NEWEST GROQ MODEL
                 messages: [
                     { role: "system", content: "You are a clinical pharmacy educator. Generate 10 multiple choice questions. Output ONLY a valid JSON object. The JSON must contain a single root key called 'questions' which is an array of objects. Each object must have: 'q' (the question string), 'opts' (array of exactly 4 strings), 'ans' (integer 0-3 for correct index), and 'exp' (string explanation)." },
                     { role: "user", content: `Topic: ${topic}. Difficulty: ${diff}. Output JSON object.` }
@@ -293,7 +292,7 @@
             const topic = document.getElementById('quizTopic').value;
             const diff = document.getElementById('quizDiff').value;
             
-            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating (Llama 3)...";
+            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating (Llama 3.3)...";
             btn.disabled = true;
 
             const rawText = await callGroq(topic, diff); 
