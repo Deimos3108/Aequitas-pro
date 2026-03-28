@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AEQUITAS CP PRO v5.2</title>
+    <title>AEQUITAS CP PRO v5.3</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -84,17 +84,15 @@
         <button class="settings-btn" id="openSettingsBtn"><i class="fa-solid fa-gear"></i> Settings</button>
     </header>
 
-    <!-- SETTINGS MODAL & QUOTA TRACKER -->
+    <!-- SETTINGS MODAL -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-content">
             <h2 style="margin-bottom: 15px;">OpenRouter Config</h2>
-            
             <div class="quota-box">
                 <span><i class="fa-solid fa-chart-pie"></i> Daily Free Limit:</span>
                 <strong id="dailyQuotaDisplay" style="color: var(--success);">0 / 200</strong>
             </div>
-
-            <p class="briefing-text">Paste your free OpenRouter API key. This unlocks specialized AIs for specific tasks.</p>
+            <p class="briefing-text">Paste your free OpenRouter API key. This version uses a Deep Fallback Queue of 7 models.</p>
             <input type="password" id="apiKeyInput" class="api-input" placeholder="sk-or-v1-...">
             <button class="action-btn" id="saveKeyBtn">Save Key</button>
             <button class="action-btn" id="closeSettingsBtn" style="background: transparent; color: var(--text-main); border: 1px solid var(--text-muted); margin-top: 10px;">Close</button>
@@ -113,7 +111,7 @@
                 <div class="chat-msg chat-ai">Hello Ahmed. What are we tackling today?</div>
             </div>
             <textarea id="chatInput" class="calc-in" placeholder="Ask a clinical or career question..." style="min-height: 50px; margin-bottom: 5px;"></textarea>
-            <div id="chatModelIndicator" class="model-indicator"><i class="fa-solid fa-microchip"></i> Routing to Gemma 2 (Medical)...</div>
+            <div id="chatModelIndicator" class="model-indicator"><i class="fa-solid fa-microchip"></i> Searching for open servers...</div>
             <button class="action-btn" id="sendChatBtn">Send <i class="fa-solid fa-paper-plane"></i></button>
             <button class="action-btn" id="closeMentorBtn" style="background: transparent; color: var(--text-main); border: 1px solid var(--text-muted); margin-top: 5px; padding: 8px;">Close</button>
         </div>
@@ -148,7 +146,7 @@
                 <option value="Clinical Exam Level">Exam Level</option>
             </select>
             <button id="practiceQuizBtn" class="action-btn secondary"><i class="fa-solid fa-play"></i> Practice Random 3 (Offline)</button>
-            <div id="quizModelIndicator" class="model-indicator"><i class="fa-solid fa-microchip"></i> Routing to Llama 3 (JSON Structuring)...</div>
+            <div id="quizModelIndicator" class="model-indicator"><i class="fa-solid fa-microchip"></i> Searching for open servers...</div>
             <button id="generateQuizBtn" class="action-btn"><i class="fa-solid fa-cloud-arrow-down"></i> Generate & Store 5 New MCQs</button>
             <div id="quizContainer"></div>
         </div>
@@ -187,7 +185,7 @@
             <p class="briefing-text">Paste your Task 2 Essay. The AI grades against official rubrics.</p>
             <select id="ieltsType" class="calc-select"><option value="Writing Task 2 (Academic Essay)">Writing Task 2</option><option value="Speaking Part 2 (Long Turn)">Speaking Part 2</option></select>
             <textarea id="ieltsInput" class="calc-in" placeholder="Paste your essay or transcript here..."></textarea>
-            <div id="ieltsModelIndicator" class="model-indicator"><i class="fa-solid fa-microchip"></i> Routing to Mistral 7B (Linguistics)...</div>
+            <div id="ieltsModelIndicator" class="model-indicator"><i class="fa-solid fa-microchip"></i> Searching for open servers...</div>
             <button id="gradeIeltsBtn" class="action-btn"><i class="fa-solid fa-check-double"></i> Assess Band Score</button>
             <div id="ieltsResult" class="result-box"></div>
         </div>
@@ -232,7 +230,6 @@
             }
             dailyQuotaDisplay.innerText = `${calls} / 200`;
             
-            // Visual Warning System
             if (calls >= 150 && calls < 190) dailyQuotaDisplay.style.color = "var(--warning)";
             else if (calls >= 190) dailyQuotaDisplay.style.color = "var(--danger)";
             else dailyQuotaDisplay.style.color = "var(--success)";
@@ -268,39 +265,48 @@
         updateDailyQuota();
 
         // ----------------------------------------------------------------
-        // THE ORCHESTRATION ENGINE (Task-Specific Routing & Fallbacks)
+        // THE DEEP FALLBACK ENGINE (7 Free Models)
         // ----------------------------------------------------------------
-        async function callOpenRouter(systemPrompt, userPrompt, taskType = 'general', forceJson = false) {
+        
+        // This array contains only models known to be completely free on OpenRouter
+        const FREE_FALLBACK_QUEUE = [
+            "meta-llama/llama-3-8b-instruct:free",
+            "google/gemma-2-9b-it:free",
+            "mistralai/mistral-7b-instruct:free",
+            "microsoft/phi-3-mini-128k-instruct:free",
+            "openchat/openchat-7b:free",
+            "undi95/toppy-m-7b:free",
+            "huggingfaceh4/zephyr-7b-beta:free"
+        ];
+
+        async function callOpenRouter(systemPrompt, userPrompt, taskType = 'general', forceJson = false, indicatorElementId = null) {
             const apiKey = localStorage.getItem('aq_or_key');
             if (!apiKey) { alert("Please open Settings and enter your OpenRouter API Key."); return null; }
 
             let currentCalls = updateDailyQuota();
-            
-            // PRE-LIMIT WARNING
-            if(currentCalls >= 190 && currentCalls < 200) {
-                alert("Warning: You are approaching your 200/day free limit. Use remaining calls wisely!");
-            } else if(currentCalls >= 200) {
-                alert("Daily Safety Limit Hit! You've reached 200 calls today. The system is locked until midnight to protect your account.");
+            if(currentCalls >= 200) {
+                alert("Daily Safety Limit Hit! You've reached 200 calls today. System locked until midnight.");
                 return null;
             }
 
-            // Task Routing: Pick the mathematically best model first, then fallbacks
             let modelsToTry = [];
+            // Prioritize the best model for the task, then dump the rest of the fallback queue behind it
             if (taskType === 'clinical') {
-                modelsToTry = ["google/gemma-2-9b-it:free", "meta-llama/llama-3-8b-instruct:free"];
+                modelsToTry = [...new Set(["google/gemma-2-9b-it:free", "meta-llama/llama-3-8b-instruct:free", ...FREE_FALLBACK_QUEUE])];
             } else if (taskType === 'json') {
-                modelsToTry = ["meta-llama/llama-3-8b-instruct:free", "mistralai/mistral-7b-instruct:free"];
-            } else if (taskType === 'ielts') {
-                modelsToTry = ["mistralai/mistral-7b-instruct:free", "meta-llama/llama-3-8b-instruct:free"];
+                modelsToTry = [...new Set(["meta-llama/llama-3-8b-instruct:free", "mistralai/mistral-7b-instruct:free", ...FREE_FALLBACK_QUEUE])];
             } else {
-                modelsToTry = ["meta-llama/llama-3-8b-instruct:free"];
+                modelsToTry = [...FREE_FALLBACK_QUEUE];
             }
 
             const url = "https://openrouter.ai/api/v1/chat/completions";
+            const indicatorEl = indicatorElementId ? document.getElementById(indicatorElementId) : null;
             
             for (let i = 0; i < modelsToTry.length; i++) {
                 const model = modelsToTry[i];
-                console.log(`Routing task '${taskType}' to: ${model}`);
+                if(indicatorEl) {
+                    indicatorEl.innerHTML = `<i class="fa-solid fa-microchip"></i> Attempting ${model.split('/')[1].split(':')[0]}...`;
+                }
                 
                 const payload = {
                     model: model,
@@ -325,22 +331,23 @@
                         const data = await response.json(); 
                         return data.choices[0].message.content;
                     }
-
+                    
+                    // If OpenRouter blocks us due to our own account limits, stop the loop immediately
                     if (response.status === 429) {
-                        alert("OpenRouter is receiving too many requests globally right now. Please wait 60 seconds and try again.");
-                        return null; // Don't fallback, just wait.
+                        alert("OpenRouter global rate limit hit. Too many people are using the free tier right now. Wait 1 minute.");
+                        return null; 
                     }
                     
                 } catch (error) {
-                    console.error(`Model ${model} failed. Trying fallback...`);
+                    console.error(`Model ${model} failed. Trying next...`);
                 }
             }
             
-            alert("All routed models are currently busy. Please try again in a few minutes.");
+            alert("All 7 fallback AI servers are currently busy or offline. Please wait 5 minutes and try again.");
             return null;
         }
 
-        // MENTOR CHAT LOGIC (Routes to Gemma 2)
+        // MENTOR CHAT LOGIC
         const mentorModal = document.getElementById('mentorModal');
         document.getElementById('fabMentor').addEventListener('click', () => mentorModal.classList.add('active'));
         document.getElementById('closeMentorBtn').addEventListener('click', () => mentorModal.classList.remove('active'));
@@ -364,7 +371,7 @@
             btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i>";
             indicator.style.display = "block";
             
-            const aiResponse = await callOpenRouter(personaPrompt, userText, 'clinical');
+            const aiResponse = await callOpenRouter(personaPrompt, userText, 'clinical', false, 'chatModelIndicator');
             
             if(aiResponse) {
                 historyBox.innerHTML += `<div class="chat-msg chat-ai">${aiResponse.replace(/\n/g, '<br>')}</div>`;
@@ -375,7 +382,7 @@
             indicator.style.display = "none";
         });
 
-        // IELTS EVALUATOR LOGIC (Routes to Mistral)
+        // IELTS EVALUATOR LOGIC
         document.getElementById('gradeIeltsBtn').addEventListener('click', async () => {
             const text = document.getElementById('ieltsInput').value.trim();
             if(!text) { alert("Please paste some text first."); return; }
@@ -385,21 +392,18 @@
             const indicator = document.getElementById('ieltsModelIndicator');
             
             btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Analyzing..."; 
-            btn.disabled = true; 
-            resBox.style.display = 'none';
-            indicator.style.display = "block";
+            btn.disabled = true; resBox.style.display = 'none'; indicator.style.display = "block";
 
             const sysPrompt = "You are a strict IELTS Band 9 examiner. Grade the text provided. Give an estimated Band Score (0-9). Break down feedback by: Task Achievement, Coherence, Lexical Resource, and Grammar. Be concise.";
-            const aiResponse = await callOpenRouter(sysPrompt, `Type: ${type}\n\nText: ${text}`, 'ielts');
+            const aiResponse = await callOpenRouter(sysPrompt, `Type: ${type}\n\nText: ${text}`, 'ielts', false, 'ieltsModelIndicator');
             
             if(aiResponse) { resBox.innerHTML = aiResponse.replace(/\n/g, '<br>'); resBox.style.display = 'block'; }
             
             btn.innerHTML = "<i class='fa-solid fa-check-double'></i> Assess Band Score"; 
-            btn.disabled = false;
-            indicator.style.display = "none";
+            btn.disabled = false; indicator.style.display = "none";
         });
 
-        // INDEXED DB & QUIZ LOGIC (Routes to Llama 3)
+        // INDEXED DB & QUIZ LOGIC
         let db;
         const request = indexedDB.open("AequitasDB", 1);
         request.onupgradeneeded = (e) => {
@@ -423,11 +427,10 @@
             const indicator = document.getElementById('quizModelIndicator');
             
             btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating..."; 
-            btn.disabled = true;
-            indicator.style.display = "block";
+            btn.disabled = true; indicator.style.display = "block";
             
             const sysPrompt = "You are a clinical educator. Generate exactly 5 MCQs. Output RAW JSON ONLY. No markdown. Format exactly: {\"questions\": [{\"q\":\"Question text\",\"opts\":[\"A\",\"B\",\"C\",\"D\"],\"ans\":0,\"exp\":\"Explanation\"}]}";
-            const rawText = await callOpenRouter(sysPrompt, `Topic: ${topic}, Level: ${diff}`, 'json', true); 
+            const rawText = await callOpenRouter(sysPrompt, `Topic: ${topic}, Level: ${diff}`, 'json', true, 'quizModelIndicator'); 
             
             if (rawText) {
                 try {
@@ -439,8 +442,7 @@
                 } catch (e) { alert("AI format error. The free model sometimes struggles with strict JSON. Please try again!"); }
             }
             btn.innerHTML = "<i class='fa-solid fa-cloud-arrow-down'></i> Generate & Store 5 New MCQs"; 
-            btn.disabled = false;
-            indicator.style.display = "none";
+            btn.disabled = false; indicator.style.display = "none";
         });
 
         function renderQuiz(dataArray) {
