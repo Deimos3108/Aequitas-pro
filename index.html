@@ -12,7 +12,6 @@
     <style>
         /* CORE DESIGN SYSTEM & VARIABLES */
         :root {
-            /* Colors */
             --bg-color: #050d1a;
             --surface-color: #0d1f3c;
             --gold-primary: #c9a84c;
@@ -22,17 +21,11 @@
             --success: #2dd4a8;
             --danger: #e05252;
             --warning: #f0a32a;
-            
-            /* Layout & Spacing */
             --spacing-main: 20px;
             --spacing-small: 10px;
             --spacing-bottom-nav: 80px;
-            
-            /* Z-index Scale */
             --z-header: 100;
             --z-bottom-nav: 1000;
-            
-            /* Sizing */
             --nav-icon-size: 1.4rem;
         }
 
@@ -79,14 +72,24 @@
         .progress-track { height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 3px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--gold-primary); border-radius: 3px; }
         
-        /* CALCULATOR & MODULES */
+        /* UI COMPONENTS */
         .calc-select { width: 100%; padding: var(--spacing-small); margin-bottom: 15px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--gold-primary); border-radius: 8px; font-family: 'DM Sans'; outline: none; }
         .calc-in { width: 100%; padding: var(--spacing-small); background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--text-muted); border-radius: 4px; font-family: "DM Sans"; margin-bottom: var(--spacing-small); outline: none; }
-        .calc-btn { width: 100%; padding: 12px; background: var(--gold-primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 5px; }
-        .calc-result-box { margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-weight: bold; line-height: 1.5; }
+        .action-btn { width: 100%; padding: 12px; background: var(--gold-primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 5px; transition: opacity 0.2s; }
+        .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .result-box { margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-weight: bold; line-height: 1.5; }
         
         .modules-grid { display: flex; flex-direction: column; gap: var(--spacing-small); }
         .module-item { padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
+
+        /* QUIZ SYSTEM STYLES */
+        .quiz-card { background: rgba(255,255,255,0.03); border: 1px solid var(--gold-glass); border-radius: 8px; padding: 15px; margin-top: 15px; }
+        .quiz-q { font-family: 'DM Sans'; font-weight: 600; margin-bottom: 12px; color: var(--gold-primary); line-height: 1.4; font-size: 0.95rem; }
+        .quiz-option { background: var(--bg-color); border: 1px solid var(--text-muted); padding: 10px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        .quiz-option.correct { background: var(--success); color: #000; border-color: var(--success); pointer-events: none; }
+        .quiz-option.incorrect { background: var(--danger); color: #fff; border-color: var(--danger); pointer-events: none; }
+        .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
+        .quiz-explanation { margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 0.85rem; display: none; border-left: 3px solid var(--success); }
     </style>
 </head>
 <body>
@@ -135,6 +138,28 @@
     <section id="knowledge" class="app-section">
         <div class="phase-badge">CLINICAL ARSENAL</div>
 
+        <!-- NEW: AI QUIZ GENERATOR -->
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-robot"></i> AI Quiz Engine</h2>
+            <p class="briefing-text" style="margin-bottom: 15px;">Generate clinical case MCQs instantly.</p>
+            
+            <select id="quizTopic" class="calc-select">
+                <option value="Cardiovascular Pharmacology (HTN, HF, Arrhythmias)">Cardiovascular</option>
+                <option value="Endocrine Pharmacology (Diabetes & Thyroid)">Endocrinology</option>
+                <option value="Infectious Disease (Antibiotics & AMR)">Infectious Disease</option>
+                <option value="Pharmacokinetics & Dosing">Pharmacokinetics</option>
+                <option value="Adverse Drug Reactions & Causality">Pharmacovigilance</option>
+            </select>
+            
+            <select id="quizDiff" class="calc-select">
+                <option value="Beginner Pharmacy Student">Beginner</option>
+                <option value="Clinical Exam Level (NAPLEX/KAPS)">Exam Level</option>
+            </select>
+
+            <button id="generateQuizBtn" class="action-btn">Generate 3 MCQs</button>
+            <div id="quizContainer"></div>
+        </div>
+
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-calculator"></i> PK Calculators</h2>
             <select id="calcSelector" class="calc-select">
@@ -146,8 +171,8 @@
             </select>
 
             <div id="calcInputs"></div>
-            <button id="runCalcBtn" class="calc-btn">Calculate</button>
-            <div id="calcResult" class="calc-result-box"></div>
+            <button id="runCalcBtn" class="action-btn">Calculate</button>
+            <div id="calcResult" class="result-box"></div>
         </div>
 
         <div class="glass-card">
@@ -191,18 +216,13 @@
         // 1. EVENT DELEGATION: Navigation Logic
         document.getElementById('mainNav').addEventListener('click', (event) => {
             const navItem = event.target.closest('.nav-item');
-            if (!navItem) return; // Ignore clicks outside nav items
+            if (!navItem) return;
             
             const sectionId = navItem.dataset.section;
-            
-            // Hide all sections, remove active states
             document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            
-            // Show new section, set active state
             document.getElementById(sectionId).classList.add('active');
             navItem.classList.add('active');
-            
             if (navigator.vibrate) { navigator.vibrate(50); }
         });
 
@@ -211,10 +231,9 @@
             const btn = document.getElementById('puterAuthBtn');
             const originalText = btn.textContent;
             btn.textContent = "Connecting...";
-            
             try {
                 if (!puter.auth.isSignedIn()) {
-                    if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    if (window.location.protocol === 'file:' || window.location.hostname === 'localhost') {
                         alert("Testing in local editor detected. Please test Sign-In on your live GitHub link!");
                         btn.textContent = originalText;
                         return;
@@ -242,7 +261,84 @@
             } catch (error) { console.error("Auth check failed:", error); }
         }
 
-        // 3. CALCULATOR LOGIC
+        // 3. AI QUIZ GENERATOR LOGIC
+        document.getElementById('generateQuizBtn').addEventListener('click', async () => {
+            if (!puter.auth.isSignedIn()) {
+                alert("Please tap 'Sign In' at the top right to enable the AI Engine.");
+                return;
+            }
+            
+            const btn = document.getElementById('generateQuizBtn');
+            const topic = document.getElementById('quizTopic').value;
+            const diff = document.getElementById('quizDiff').value;
+            const container = document.getElementById('quizContainer');
+            
+            btn.textContent = "Generating... (takes ~5s)";
+            btn.disabled = true;
+            container.innerHTML = '';
+
+            const prompt = `You are a PharmD clinical pharmacy educator. Generate exactly 3 Multiple Choice Questions (MCQs) on: ${topic}. Difficulty level: ${diff}. 
+            Return ONLY a raw JSON array. Do not use markdown blocks. Each object must have these exact keys: "q" (the question string), "opts" (an array of exactly 4 strings for options), "ans" (the integer index of the correct option, 0 to 3), and "exp" (a string explaining why it is correct and clinically relevant).`;
+
+            try {
+                // Call Google Gemini 2.5 Flash via Puter openrouter
+                const response = await puter.ai.chat(prompt, { model: 'openrouter:google/gemini-2.5-flash' });
+                let rawText = response.toString().trim();
+                
+                // Safety clean if AI still wrapped in markdown
+                if(rawText.startsWith('```json')) { rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim(); }
+                if(rawText.startsWith('```')) { rawText = rawText.replace(/```/g, '').trim(); }
+                
+                const data = JSON.parse(rawText);
+                
+                let htmlStr = '';
+                data.forEach((item, index) => {
+                    htmlStr += `<div class="quiz-card" data-ans="${item.ans}">
+                        <div class="quiz-q">Q${index + 1}. ${item.q}</div>
+                        <div class="opts-container">`;
+                    item.opts.forEach((opt, oIdx) => {
+                        htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`;
+                    });
+                    htmlStr += `</div><div class="quiz-explanation"><strong>Explanation:</strong> ${item.exp}</div></div>`;
+                });
+                
+                container.innerHTML = htmlStr;
+
+            } catch (error) {
+                console.error("AI Quiz Error:", error);
+                alert("Failed to generate quiz. Please try again.");
+            }
+            
+            btn.textContent = "Generate 3 MCQs";
+            btn.disabled = false;
+        });
+
+        // 4. EVENT DELEGATION: Quiz Option Click Logic
+        document.getElementById('quizContainer').addEventListener('click', (event) => {
+            const optDiv = event.target.closest('.quiz-option');
+            if (!optDiv) return;
+
+            const optsContainer = optDiv.parentElement;
+            const card = optsContainer.parentElement;
+            const correctIdx = parseInt(card.dataset.ans);
+            const clickedIdx = parseInt(optDiv.dataset.idx);
+
+            // Disable all options in this question to prevent double guessing
+            optsContainer.querySelectorAll('.quiz-option').forEach(el => el.classList.add('disabled'));
+
+            // Check answer and apply classes
+            if (clickedIdx === correctIdx) {
+                optDiv.classList.add('correct');
+            } else {
+                optDiv.classList.add('incorrect');
+                optsContainer.children[correctIdx].classList.add('correct'); // Show correct one
+            }
+
+            // Show explanation
+            card.querySelector('.quiz-explanation').style.display = 'block';
+        });
+
+        // 5. CALCULATOR LOGIC
         const calcData = {
             crcl: { html: '<input type="number" id="age" placeholder="Age (years)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="scr" placeholder="Serum Creatinine (mg/dL)" class="calc-in"><select id="sex" class="calc-in"><option value="m">Male</option><option value="f">Female</option></select>' },
             calcium: { html: '<input type="number" id="ca" placeholder="Measured Calcium (mg/dL)" class="calc-in"><input type="number" id="alb" placeholder="Albumin (g/dL)" class="calc-in">' },
@@ -251,77 +347,39 @@
             infusion: { html: '<input type="number" id="dose" placeholder="Dose (mg)" class="calc-in"><input type="number" id="vol" placeholder="Volume (mL)" class="calc-in"><input type="number" id="time" placeholder="Time (hours)" class="calc-in">' }
         };
 
-        // Event listener for the calculate button
         document.getElementById('runCalcBtn').addEventListener('click', () => {
             const type = document.getElementById('calcSelector').value;
             const calcResult = document.getElementById('calcResult');
             let resultText = "";
-            
             try {
                 if(type === 'crcl') {
-                    let age = parseFloat(document.getElementById('age').value);
-                    let wt = parseFloat(document.getElementById('wt').value);
-                    let scr = parseFloat(document.getElementById('scr').value);
-                    let sex = document.getElementById('sex').value;
+                    let age = parseFloat(document.getElementById('age').value); let wt = parseFloat(document.getElementById('wt').value); let scr = parseFloat(document.getElementById('scr').value); let sex = document.getElementById('sex').value;
                     if(isNaN(age) || isNaN(wt) || isNaN(scr)) throw new Error();
-                    
-                    let crcl = ((140 - age) * wt) / (72 * scr);
-                    if(sex === 'f') crcl *= 0.85;
-                    resultText = `CrCl: ${crcl.toFixed(2)} mL/min`;
-                    
+                    let crcl = ((140 - age) * wt) / (72 * scr); if(sex === 'f') crcl *= 0.85; resultText = `CrCl: ${crcl.toFixed(2)} mL/min`;
                 } else if (type === 'calcium') {
-                    let ca = parseFloat(document.getElementById('ca').value);
-                    let alb = parseFloat(document.getElementById('alb').value);
-                    if(isNaN(ca) || isNaN(alb)) throw new Error();
-                    
-                    let corr = ca + (0.8 * (4.0 - alb));
-                    resultText = `Corrected Calcium: ${corr.toFixed(2)} mg/dL`;
-                    
+                    let ca = parseFloat(document.getElementById('ca').value); let alb = parseFloat(document.getElementById('alb').value);
+                    if(isNaN(ca) || isNaN(alb)) throw new Error(); let corr = ca + (0.8 * (4.0 - alb)); resultText = `Corrected Calcium: ${corr.toFixed(2)} mg/dL`;
                 } else if (type === 'loading') {
-                    let vd = parseFloat(document.getElementById('vd').value);
-                    let wt = parseFloat(document.getElementById('wt').value);
-                    let target = parseFloat(document.getElementById('targetCp').value);
-                    if(isNaN(vd) || isNaN(wt) || isNaN(target)) throw new Error();
-                    
-                    let dose = vd * wt * target;
-                    resultText = `Loading Dose: ${dose.toFixed(2)} mg`;
-                    
+                    let vd = parseFloat(document.getElementById('vd').value); let wt = parseFloat(document.getElementById('wt').value); let target = parseFloat(document.getElementById('targetCp').value);
+                    if(isNaN(vd) || isNaN(wt) || isNaN(target)) throw new Error(); let dose = vd * wt * target; resultText = `Loading Dose: ${dose.toFixed(2)} mg`;
                 } else if (type === 'bsa') {
-                    let ht = parseFloat(document.getElementById('ht').value);
-                    let wt = parseFloat(document.getElementById('wt').value);
-                    if(isNaN(ht) || isNaN(wt)) throw new Error();
-                    
-                    let bsa = Math.sqrt((ht * wt) / 3600);
-                    let bmi = wt / Math.pow((ht/100), 2);
-                    resultText = `BSA: ${bsa.toFixed(2)} m² <br> BMI: ${bmi.toFixed(1)} kg/m²`;
-                    
+                    let ht = parseFloat(document.getElementById('ht').value); let wt = parseFloat(document.getElementById('wt').value);
+                    if(isNaN(ht) || isNaN(wt)) throw new Error(); let bsa = Math.sqrt((ht * wt) / 3600); let bmi = wt / Math.pow((ht/100), 2); resultText = `BSA: ${bsa.toFixed(2)} m² <br> BMI: ${bmi.toFixed(1)} kg/m²`;
                 } else if (type === 'infusion') {
-                    let dose = parseFloat(document.getElementById('dose').value);
-                    let vol = parseFloat(document.getElementById('vol').value);
-                    let time = parseFloat(document.getElementById('time').value);
-                    if(isNaN(dose) || isNaN(vol) || isNaN(time)) throw new Error();
-                    
-                    let rate = vol / time;
-                    let conc = dose / vol;
-                    resultText = `Rate: ${rate.toFixed(1)} mL/hr <br> Concentration: ${conc.toFixed(2)} mg/mL`;
+                    let dose = parseFloat(document.getElementById('dose').value); let vol = parseFloat(document.getElementById('vol').value); let time = parseFloat(document.getElementById('time').value);
+                    if(isNaN(dose) || isNaN(vol) || isNaN(time)) throw new Error(); let rate = vol / time; let conc = dose / vol; resultText = `Rate: ${rate.toFixed(1)} mL/hr <br> Concentration: ${conc.toFixed(2)} mg/mL`;
                 }
-                
-                calcResult.innerHTML = resultText;
-                calcResult.style.display = 'block';
+                calcResult.innerHTML = resultText; calcResult.style.display = 'block';
             } catch (err) {
-                calcResult.innerHTML = "<span style='color: var(--danger);'>Please fill all fields correctly.</span>";
-                calcResult.style.display = 'block';
+                calcResult.innerHTML = "<span style='color: var(--danger);'>Please fill all fields correctly.</span>"; calcResult.style.display = 'block';
             }
         });
 
         // INITIALIZATION
         document.addEventListener('DOMContentLoaded', () => {
             checkAuthState();
-            
-            // Setup Calculators DOM
             const calcSelector = document.getElementById('calcSelector');
             const calcInputs = document.getElementById('calcInputs');
-            
             if(calcSelector && calcInputs) {
                 calcInputs.innerHTML = calcData['crcl'].html;
                 calcSelector.addEventListener('change', (e) => {
