@@ -246,13 +246,51 @@
         }
         checkKeyStatus();
 
-        // GEMINI AI DIRECT FETCH LOGIC (Replaces Puter)
+        // GEMINI AI DIRECT FETCH LOGIC (Updated & Error-Proofed)
         async function callGemini(prompt, forceJSON = false) {
             const apiKey = localStorage.getItem('aq_api_key');
             if (!apiKey) {
                 alert("Please open Settings and enter your Gemini API Key first.");
                 return null;
             }
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }]
+            };
+
+            // FIX: Google REST API strictly requires camelCase here
+            if (forceJSON) {
+                payload.generationConfig = { responseMimeType: "application/json" };
+            }
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // Advanced Mobile Debugging: Show the EXACT error from Google
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    const errorMsg = errorData.error ? errorData.error.message : "Unknown API Error";
+                    alert(`Google API Error: ${errorMsg}`);
+                    console.error("Full Google Error:", errorData);
+                    return null;
+                }
+                
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+                
+            } catch (error) {
+                console.error("Fetch Execution Error:", error);
+                alert("Network failed. Please verify your internet connection.");
+                return null;
+            }
+        }
+
 
             // We use Gemini 1.5 Flash - incredibly fast, smart, and free tier is massive
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
