@@ -7,29 +7,17 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://js.puter.com/v2/"></script>
 
     <style>
         /* CORE DESIGN SYSTEM & VARIABLES */
         :root {
-            --bg-color: #050d1a;
-            --surface-color: #0d1f3c;
-            --gold-primary: #c9a84c;
-            --gold-glass: rgba(201, 168, 76, 0.15);
-            --text-main: #e8eaf0;
-            --text-muted: #8892a4;
-            --success: #2dd4a8;
-            --danger: #e05252;
-            --warning: #f0a32a;
-            --spacing-main: 20px;
-            --spacing-small: 10px;
-            --spacing-bottom-nav: 80px;
-            --z-header: 100;
-            --z-bottom-nav: 1000;
-            --nav-icon-size: 1.4rem;
+            --bg-color: #050d1a; --surface-color: #0d1f3c; --gold-primary: #c9a84c;
+            --gold-glass: rgba(201, 168, 76, 0.15); --text-main: #e8eaf0; --text-muted: #8892a4;
+            --success: #2dd4a8; --danger: #e05252; --warning: #f0a32a;
+            --spacing-main: 20px; --spacing-small: 10px; --spacing-bottom-nav: 80px;
+            --z-header: 100; --z-bottom-nav: 1000; --nav-icon-size: 1.4rem;
         }
 
-        /* GLOBAL STYLES */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-color); color: var(--text-main); font-family: 'DM Sans', sans-serif; padding-bottom: var(--spacing-bottom-nav); overflow-x: hidden; }
         h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--gold-primary); }
@@ -38,7 +26,8 @@
         header { display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-main); background: rgba(5, 13, 26, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--gold-glass); position: sticky; top: 0; z-index: var(--z-header); }
         .logo { font-size: 1.4rem; letter-spacing: 1px; }
         .logo-span { font-family: 'DM Sans'; font-size: 1rem; color: var(--text-main); font-weight: 400; }
-        .auth-btn { background: transparent; border: 1px solid var(--gold-primary); color: var(--gold-primary); padding: 8px 16px; border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+        .settings-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); padding: 8px 16px; border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; }
+        .settings-btn.ready { border-color: var(--success); color: var(--success); }
 
         /* SECTIONS & CARDS */
         .app-section { display: none; padding: var(--spacing-main); animation: slideUp 0.3s ease-out forwards; }
@@ -53,76 +42,68 @@
         .briefing-text { font-size: 0.9rem; color: var(--text-muted); margin-bottom: var(--spacing-small); line-height: 1.4; }
         .briefing-text strong { font-weight: 600; color: var(--text-main); }
         
-        /* PLACEHOLDER STYLES */
         [data-status="placeholder"] .glass-card { opacity: 0.8; }
         .status-badge { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; background: var(--warning); color: var(--bg-color); padding: 4px 8px; border-radius: 4px; margin-left: auto; font-weight: bold; text-transform: uppercase; }
-        .placeholder-message { color: var(--text-muted); font-style: italic; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
 
         /* NAVIGATION */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--surface-color); border-top: 1px solid var(--gold-glass); display: flex; justify-content: space-around; padding: var(--spacing-small) 0; padding-bottom: env(safe-area-inset-bottom, 15px); z-index: var(--z-bottom-nav); }
         .nav-item { color: var(--text-muted); text-align: center; font-size: 0.75rem; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 60px; cursor: pointer; transition: color 0.2s ease; }
-        .nav-item i { font-size: var(--nav-icon-size); transition: transform 0.2s ease; pointer-events: none; }
+        .nav-item i { font-size: var(--nav-icon-size); pointer-events: none; }
         .nav-item span { pointer-events: none; }
         .nav-item.active { color: var(--gold-primary); }
-        .nav-item.active i { transform: scale(1.1); }
 
-        /* PROGRESS BARS */
-        .progress-container { margin-bottom: 15px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; color: var(--text-muted); }
-        .progress-track { height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 3px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--gold-primary); border-radius: 3px; }
-        
         /* UI COMPONENTS */
-        .calc-select { width: 100%; padding: var(--spacing-small); margin-bottom: 15px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--gold-primary); border-radius: 8px; font-family: 'DM Sans'; outline: none; }
-        .calc-in { width: 100%; padding: var(--spacing-small); background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--text-muted); border-radius: 4px; font-family: "DM Sans"; margin-bottom: var(--spacing-small); outline: none; }
+        .calc-select, .calc-in, .api-input { width: 100%; padding: var(--spacing-small); margin-bottom: 15px; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--gold-primary); border-radius: 8px; font-family: 'DM Sans'; outline: none; }
+        .api-input { border-color: var(--text-muted); }
         .action-btn { width: 100%; padding: 12px; background: var(--gold-primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 5px; transition: opacity 0.2s; }
         .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .result-box { margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-weight: bold; line-height: 1.5; }
         
-        .modules-grid { display: flex; flex-direction: column; gap: var(--spacing-small); }
-        .module-item { padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
-
         /* QUIZ SYSTEM STYLES */
         .quiz-card { background: rgba(255,255,255,0.03); border: 1px solid var(--gold-glass); border-radius: 8px; padding: 15px; margin-top: 15px; }
-        .quiz-q { font-family: 'DM Sans'; font-weight: 600; margin-bottom: 12px; color: var(--gold-primary); line-height: 1.4; font-size: 0.95rem; }
-        .quiz-option { background: var(--bg-color); border: 1px solid var(--text-muted); padding: 10px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        .quiz-q { font-weight: 600; margin-bottom: 12px; color: var(--gold-primary); line-height: 1.4; font-size: 0.95rem; }
+        .quiz-option { background: var(--bg-color); border: 1px solid var(--text-muted); padding: 10px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 0.9rem; }
         .quiz-option.correct { background: var(--success); color: #000; border-color: var(--success); pointer-events: none; }
         .quiz-option.incorrect { background: var(--danger); color: #fff; border-color: var(--danger); pointer-events: none; }
         .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
         .quiz-explanation { margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 0.85rem; display: none; border-left: 3px solid var(--success); }
+
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--surface-color); border: 1px solid var(--gold-primary); border-radius: 12px; padding: 20px; width: 100%; max-width: 400px; }
+        
+        /* JOB WAR ROOM STYLES */
+        .job-card { background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold-primary); padding: 12px; margin-bottom: 10px; border-radius: 4px; }
+        .job-title { font-weight: bold; color: var(--text-main); font-size: 1rem; }
+        .job-detail { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo">AEQUITAS <span class="logo-span">PRO</span></h1>
-        <button class="auth-btn" id="puterAuthBtn">Sign In</button>
+        <button class="settings-btn" id="openSettingsBtn"><i class="fa-solid fa-gear"></i> Settings</button>
     </header>
+
+    <!-- SETTINGS MODAL (API KEY VAULT) -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 15px;">AI Configuration</h2>
+            <p class="briefing-text">Paste your free Google Gemini API key here. It saves locally to your phone and never goes to a server.</p>
+            <input type="password" id="apiKeyInput" class="api-input" placeholder="AIzaSy...">
+            <button class="action-btn" id="saveKeyBtn">Save Key</button>
+            <button class="action-btn" id="closeSettingsBtn" style="background: transparent; color: var(--text-main); border: 1px solid var(--text-muted); margin-top: 10px;">Close</button>
+        </div>
+    </div>
 
     <!-- SECTION 1: COMMAND CENTER -->
     <section id="dashboard" class="app-section active">
         <div class="phase-badge">PHASE 1: FOUNDATION</div>
-        
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-chart-line"></i> Career Track Health</h2>
-            <div class="progress-container">
-                <div class="progress-label"><span>Clinical Pharmacy</span><span>10%</span></div>
-                <div class="progress-track"><div class="progress-fill" style="width: 10%; background: var(--success);"></div></div>
-            </div>
-            <div class="progress-container">
-                <div class="progress-label"><span>Pharmacovigilance (CRO)</span><span>15%</span></div>
-                <div class="progress-track"><div class="progress-fill" style="width: 15%;"></div></div>
-            </div>
-            <div class="progress-container">
-                <div class="progress-label"><span>Medical Writing</span><span>5%</span></div>
-                <div class="progress-track"><div class="progress-fill" style="width: 5%; background: var(--warning);"></div></div>
-            </div>
-        </div>
-
-        <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-bolt"></i> Daily Briefing</h2>
-            <p class="briefing-text"><strong>Clinical Pearl:</strong> Never give IV calcium and IV sodium bicarbonate in the same line—they precipitate immediately. Flush the line first.</p>
-            <p class="briefing-text"><strong>Action:</strong> Check TS Pharmacy Council registration status today.</p>
+            <div class="progress-container"><div class="progress-label"><span>Clinical Pharmacy</span><span>10%</span></div><div class="progress-track"><div class="progress-fill" style="width: 10%; background: var(--success);"></div></div></div>
+            <div class="progress-container"><div class="progress-label"><span>Pharmacovigilance (CRO)</span><span>15%</span></div><div class="progress-track"><div class="progress-fill" style="width: 15%;"></div></div></div>
+            <div class="progress-container"><div class="progress-label"><span>Medical Writing</span><span>5%</span></div><div class="progress-track"><div class="progress-fill" style="width: 5%; background: var(--warning);"></div></div></div>
         </div>
     </section>
 
@@ -134,64 +115,71 @@
         </div>
     </section>
 
-    <!-- SECTION 3: KNOWLEDGE ENGINE & CALCULATORS -->
+    <!-- SECTION 3: KNOWLEDGE ENGINE -->
     <section id="knowledge" class="app-section">
         <div class="phase-badge">CLINICAL ARSENAL</div>
 
-        <!-- NEW: AI QUIZ GENERATOR -->
+        <!-- NEW AI QUIZ ENGINE (POWERED BY GEMINI) -->
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-robot"></i> AI Quiz Engine</h2>
-            <p class="briefing-text" style="margin-bottom: 15px;">Generate clinical case MCQs instantly.</p>
-            
             <select id="quizTopic" class="calc-select">
                 <option value="Cardiovascular Pharmacology (HTN, HF, Arrhythmias)">Cardiovascular</option>
                 <option value="Endocrine Pharmacology (Diabetes & Thyroid)">Endocrinology</option>
-                <option value="Infectious Disease (Antibiotics & AMR)">Infectious Disease</option>
-                <option value="Pharmacokinetics & Dosing">Pharmacokinetics</option>
-                <option value="Adverse Drug Reactions & Causality">Pharmacovigilance</option>
+                <option value="Infectious Disease (Antibiotics)">Infectious Disease</option>
             </select>
-            
             <select id="quizDiff" class="calc-select">
                 <option value="Beginner Pharmacy Student">Beginner</option>
-                <option value="Clinical Exam Level (NAPLEX/KAPS)">Exam Level</option>
+                <option value="Clinical Exam Level">Exam Level</option>
             </select>
-
             <button id="generateQuizBtn" class="action-btn">Generate 3 MCQs</button>
             <div id="quizContainer"></div>
         </div>
-
-        <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-calculator"></i> PK Calculators</h2>
-            <select id="calcSelector" class="calc-select">
-                <option value="crcl">1. Creatinine Clearance (Cockcroft-Gault)</option>
-                <option value="calcium">2. Corrected Calcium</option>
-                <option value="loading">3. Loading Dose</option>
-                <option value="bsa">4. Body Surface Area (BSA) & BMI</option>
-                <option value="infusion">5. IV Infusion Rate</option>
-            </select>
-
-            <div id="calcInputs"></div>
-            <button id="runCalcBtn" class="action-btn">Calculate</button>
-            <div id="calcResult" class="result-box"></div>
-        </div>
-
-        <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-book-medical"></i> 10 Core Modules</h2>
-            <div class="modules-grid">
-                <div class="module-item"><span>1. Systemic Pharmacology</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-                <div class="module-item"><span>2. Pharmacotherapeutics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-                <div class="module-item"><span>3. Clinical Pharmacy Practice</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-                <div class="module-item"><span>4. Drug Interactions</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-                <div class="module-item"><span>5. Pharmacokinetics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-            </div>
-        </div>
     </section>
 
-    <!-- SECTION 4: CAREER -->
-    <section id="career" class="app-section" data-status="placeholder">
+    <!-- SECTION 4: CAREER (JOB WAR ROOM) -->
+    <section id="career" class="app-section">
+        <div class="phase-badge">HYDERABAD JOB WAR ROOM</div>
+        
         <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-briefcase"></i> Job War Room <span class="status-badge">In Dev</span></h2>
-            <p class="placeholder-message"><i class="fa-solid fa-hammer"></i> Hyderabad Hospital & CRO tracker will load here.</p>
+            <h2 class="card-header"><i class="fa-solid fa-hospital"></i> Clinical Pharmacy</h2>
+            <p class="briefing-text">Target JCI-accredited corporate hospitals first.</p>
+            
+            <div class="job-card">
+                <div class="job-title">Apollo Hospitals (Jubilee Hills/Secunderabad)</div>
+                <div class="job-detail"><strong>Role:</strong> Clinical Pharmacist</div>
+                <div class="job-detail"><strong>Strategy:</strong> LinkedIn direct to HR; apollo.jobs portal.</div>
+            </div>
+            <div class="job-card">
+                <div class="job-title">Yashoda Hospitals (Somajiguda/Secunderabad)</div>
+                <div class="job-detail"><strong>Role:</strong> Ward Pharmacist</div>
+                <div class="job-detail"><strong>Strategy:</strong> Walk-in highly effective here.</div>
+            </div>
+            <div class="job-card">
+                <div class="job-title">KIMS Hospitals</div>
+                <div class="job-detail"><strong>Role:</strong> Clinical Pharmacist</div>
+                <div class="job-detail"><strong>Strategy:</strong> Check kims.co.in/careers.</div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-shield-virus"></i> Pharmacovigilance (CROs)</h2>
+            <p class="briefing-text">Top targets for fresher PharmD graduates.</p>
+            
+            <div class="job-card" style="border-left-color: var(--success);">
+                <div class="job-title">Syneos Health (HITEC City)</div>
+                <div class="job-detail"><strong>Role:</strong> Global Safety Associate</div>
+                <div class="job-detail"><strong>Note:</strong> Highest fresher pay; selective. Needs GCP.</div>
+            </div>
+            <div class="job-card">
+                <div class="job-title">Parexel (HITEC City)</div>
+                <div class="job-detail"><strong>Role:</strong> PV Associate</div>
+                <div class="job-detail"><strong>Note:</strong> Established structured training.</div>
+            </div>
+            <div class="job-card">
+                <div class="job-title">TCS / Cognizant / Accenture</div>
+                <div class="job-detail"><strong>Role:</strong> Drug Safety Associate</div>
+                <div class="job-detail"><strong>Note:</strong> Mass walk-in drives frequently posted on Naukri.</div>
+            </div>
         </div>
     </section>
 
@@ -213,11 +201,10 @@
     </nav>
 
     <script>
-        // 1. EVENT DELEGATION: Navigation Logic
+        // NAVIGATION LOGIC
         document.getElementById('mainNav').addEventListener('click', (event) => {
             const navItem = event.target.closest('.nav-item');
             if (!navItem) return;
-            
             const sectionId = navItem.dataset.section;
             document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
@@ -226,48 +213,78 @@
             if (navigator.vibrate) { navigator.vibrate(50); }
         });
 
-        // 2. EVENT LISTENER: Puter Auth Logic
-        document.getElementById('puterAuthBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('puterAuthBtn');
-            const originalText = btn.textContent;
-            btn.textContent = "Connecting...";
-            try {
-                if (!puter.auth.isSignedIn()) {
-                    if (window.location.protocol === 'file:' || window.location.hostname === 'localhost') {
-                        alert("Testing in local editor detected. Please test Sign-In on your live GitHub link!");
-                        btn.textContent = originalText;
-                        return;
-                    }
-                    await puter.auth.signIn();
-                    checkAuthState();
-                } else {
-                    alert("You are already authenticated and ready.");
-                    checkAuthState();
-                }
-            } catch (error) {
-                console.error("Auth error:", error);
-                btn.textContent = originalText;
+        // SETTINGS / API KEY LOGIC
+        const settingsModal = document.getElementById('settingsModal');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const settingsBtn = document.getElementById('openSettingsBtn');
+
+        document.getElementById('openSettingsBtn').addEventListener('click', () => {
+            apiKeyInput.value = localStorage.getItem('aq_api_key') || '';
+            settingsModal.classList.add('active');
+        });
+
+        document.getElementById('closeSettingsBtn').addEventListener('click', () => {
+            settingsModal.classList.remove('active');
+        });
+
+        document.getElementById('saveKeyBtn').addEventListener('click', () => {
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                localStorage.setItem('aq_api_key', key);
+                checkKeyStatus();
+                settingsModal.classList.remove('active');
+            } else {
+                alert("Please enter a valid key.");
             }
         });
 
-        async function checkAuthState() {
+        function checkKeyStatus() {
+            if (localStorage.getItem('aq_api_key')) {
+                settingsBtn.classList.add('ready');
+                settingsBtn.innerHTML = '<i class="fa-solid fa-check"></i> AI Ready';
+            }
+        }
+        checkKeyStatus();
+
+        // GEMINI AI DIRECT FETCH LOGIC (Replaces Puter)
+        async function callGemini(prompt, forceJSON = false) {
+            const apiKey = localStorage.getItem('aq_api_key');
+            if (!apiKey) {
+                alert("Please open Settings and enter your Gemini API Key first.");
+                return null;
+            }
+
+            // We use Gemini 1.5 Flash - incredibly fast, smart, and free tier is massive
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }]
+            };
+
+            if (forceJSON) {
+                payload.generationConfig = { response_mime_type: "application/json" };
+            }
+
             try {
-                if (puter.auth.isSignedIn()) {
-                    const btn = document.getElementById('puterAuthBtn');
-                    btn.textContent = "AI Ready";
-                    btn.style.borderColor = "var(--success)";
-                    btn.style.color = "var(--success)";
-                }
-            } catch (error) { console.error("Auth check failed:", error); }
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error("API request failed. Check your API key.");
+                
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                alert("AI call failed. Please verify your internet connection and API key.");
+                return null;
+            }
         }
 
-        // 3. AI QUIZ GENERATOR LOGIC
+        // AI QUIZ GENERATOR LOGIC (Updated for Gemini)
         document.getElementById('generateQuizBtn').addEventListener('click', async () => {
-            if (!puter.auth.isSignedIn()) {
-                alert("Please tap 'Sign In' at the top right to enable the AI Engine.");
-                return;
-            }
-            
             const btn = document.getElementById('generateQuizBtn');
             const topic = document.getElementById('quizTopic').value;
             const diff = document.getElementById('quizDiff').value;
@@ -277,43 +294,36 @@
             btn.disabled = true;
             container.innerHTML = '';
 
+            // Using JSON Schema prompt for Gemini
             const prompt = `You are a PharmD clinical pharmacy educator. Generate exactly 3 Multiple Choice Questions (MCQs) on: ${topic}. Difficulty level: ${diff}. 
-            Return ONLY a raw JSON array. Do not use markdown blocks. Each object must have these exact keys: "q" (the question string), "opts" (an array of exactly 4 strings for options), "ans" (the integer index of the correct option, 0 to 3), and "exp" (a string explaining why it is correct and clinically relevant).`;
+            Return a JSON array of objects. Each object must have keys: "q" (string, the question), "opts" (array of exactly 4 strings for options), "ans" (integer 0-3, index of correct option), and "exp" (string, clinical explanation).`;
 
-            try {
-                // Call Google Gemini 2.5 Flash via Puter openrouter
-                const response = await puter.ai.chat(prompt, { model: 'openrouter:google/gemini-2.5-flash' });
-                let rawText = response.toString().trim();
-                
-                // Safety clean if AI still wrapped in markdown
-                if(rawText.startsWith('```json')) { rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim(); }
-                if(rawText.startsWith('```')) { rawText = rawText.replace(/```/g, '').trim(); }
-                
-                const data = JSON.parse(rawText);
-                
-                let htmlStr = '';
-                data.forEach((item, index) => {
-                    htmlStr += `<div class="quiz-card" data-ans="${item.ans}">
-                        <div class="quiz-q">Q${index + 1}. ${item.q}</div>
-                        <div class="opts-container">`;
-                    item.opts.forEach((opt, oIdx) => {
-                        htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`;
+            const rawText = await callGemini(prompt, true); // forceJSON = true
+            
+            if (rawText) {
+                try {
+                    const data = JSON.parse(rawText);
+                    let htmlStr = '';
+                    data.forEach((item, index) => {
+                        htmlStr += `<div class="quiz-card" data-ans="${item.ans}">
+                            <div class="quiz-q">Q${index + 1}. ${item.q}</div>
+                            <div class="opts-container">`;
+                        item.opts.forEach((opt, oIdx) => {
+                            htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`;
+                        });
+                        htmlStr += `</div><div class="quiz-explanation"><strong>Explanation:</strong> ${item.exp}</div></div>`;
                     });
-                    htmlStr += `</div><div class="quiz-explanation"><strong>Explanation:</strong> ${item.exp}</div></div>`;
-                });
-                
-                container.innerHTML = htmlStr;
-
-            } catch (error) {
-                console.error("AI Quiz Error:", error);
-                alert("Failed to generate quiz. Please try again.");
+                    container.innerHTML = htmlStr;
+                } catch (e) {
+                    container.innerHTML = "<p style='color:var(--danger)'>Error parsing AI response.</p>";
+                }
             }
             
             btn.textContent = "Generate 3 MCQs";
             btn.disabled = false;
         });
 
-        // 4. EVENT DELEGATION: Quiz Option Click Logic
+        // EVENT DELEGATION: Quiz Option Click Logic
         document.getElementById('quizContainer').addEventListener('click', (event) => {
             const optDiv = event.target.closest('.quiz-option');
             if (!optDiv) return;
@@ -323,71 +333,17 @@
             const correctIdx = parseInt(card.dataset.ans);
             const clickedIdx = parseInt(optDiv.dataset.idx);
 
-            // Disable all options in this question to prevent double guessing
             optsContainer.querySelectorAll('.quiz-option').forEach(el => el.classList.add('disabled'));
 
-            // Check answer and apply classes
             if (clickedIdx === correctIdx) {
                 optDiv.classList.add('correct');
             } else {
                 optDiv.classList.add('incorrect');
-                optsContainer.children[correctIdx].classList.add('correct'); // Show correct one
+                optsContainer.children[correctIdx].classList.add('correct'); 
             }
-
-            // Show explanation
             card.querySelector('.quiz-explanation').style.display = 'block';
         });
 
-        // 5. CALCULATOR LOGIC
-        const calcData = {
-            crcl: { html: '<input type="number" id="age" placeholder="Age (years)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="scr" placeholder="Serum Creatinine (mg/dL)" class="calc-in"><select id="sex" class="calc-in"><option value="m">Male</option><option value="f">Female</option></select>' },
-            calcium: { html: '<input type="number" id="ca" placeholder="Measured Calcium (mg/dL)" class="calc-in"><input type="number" id="alb" placeholder="Albumin (g/dL)" class="calc-in">' },
-            loading: { html: '<input type="number" id="vd" placeholder="Volume of Dist. (L/kg)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="targetCp" placeholder="Target Conc. (mg/L)" class="calc-in">' },
-            bsa: { html: '<input type="number" id="ht" placeholder="Height (cm)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in">' },
-            infusion: { html: '<input type="number" id="dose" placeholder="Dose (mg)" class="calc-in"><input type="number" id="vol" placeholder="Volume (mL)" class="calc-in"><input type="number" id="time" placeholder="Time (hours)" class="calc-in">' }
-        };
-
-        document.getElementById('runCalcBtn').addEventListener('click', () => {
-            const type = document.getElementById('calcSelector').value;
-            const calcResult = document.getElementById('calcResult');
-            let resultText = "";
-            try {
-                if(type === 'crcl') {
-                    let age = parseFloat(document.getElementById('age').value); let wt = parseFloat(document.getElementById('wt').value); let scr = parseFloat(document.getElementById('scr').value); let sex = document.getElementById('sex').value;
-                    if(isNaN(age) || isNaN(wt) || isNaN(scr)) throw new Error();
-                    let crcl = ((140 - age) * wt) / (72 * scr); if(sex === 'f') crcl *= 0.85; resultText = `CrCl: ${crcl.toFixed(2)} mL/min`;
-                } else if (type === 'calcium') {
-                    let ca = parseFloat(document.getElementById('ca').value); let alb = parseFloat(document.getElementById('alb').value);
-                    if(isNaN(ca) || isNaN(alb)) throw new Error(); let corr = ca + (0.8 * (4.0 - alb)); resultText = `Corrected Calcium: ${corr.toFixed(2)} mg/dL`;
-                } else if (type === 'loading') {
-                    let vd = parseFloat(document.getElementById('vd').value); let wt = parseFloat(document.getElementById('wt').value); let target = parseFloat(document.getElementById('targetCp').value);
-                    if(isNaN(vd) || isNaN(wt) || isNaN(target)) throw new Error(); let dose = vd * wt * target; resultText = `Loading Dose: ${dose.toFixed(2)} mg`;
-                } else if (type === 'bsa') {
-                    let ht = parseFloat(document.getElementById('ht').value); let wt = parseFloat(document.getElementById('wt').value);
-                    if(isNaN(ht) || isNaN(wt)) throw new Error(); let bsa = Math.sqrt((ht * wt) / 3600); let bmi = wt / Math.pow((ht/100), 2); resultText = `BSA: ${bsa.toFixed(2)} m² <br> BMI: ${bmi.toFixed(1)} kg/m²`;
-                } else if (type === 'infusion') {
-                    let dose = parseFloat(document.getElementById('dose').value); let vol = parseFloat(document.getElementById('vol').value); let time = parseFloat(document.getElementById('time').value);
-                    if(isNaN(dose) || isNaN(vol) || isNaN(time)) throw new Error(); let rate = vol / time; let conc = dose / vol; resultText = `Rate: ${rate.toFixed(1)} mL/hr <br> Concentration: ${conc.toFixed(2)} mg/mL`;
-                }
-                calcResult.innerHTML = resultText; calcResult.style.display = 'block';
-            } catch (err) {
-                calcResult.innerHTML = "<span style='color: var(--danger);'>Please fill all fields correctly.</span>"; calcResult.style.display = 'block';
-            }
-        });
-
-        // INITIALIZATION
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuthState();
-            const calcSelector = document.getElementById('calcSelector');
-            const calcInputs = document.getElementById('calcInputs');
-            if(calcSelector && calcInputs) {
-                calcInputs.innerHTML = calcData['crcl'].html;
-                calcSelector.addEventListener('change', (e) => {
-                    calcInputs.innerHTML = calcData[e.target.value] ? calcData[e.target.value].html : '';
-                    document.getElementById('calcResult').style.display = 'none';
-                });
-            }
-        });
     </script>
 </body>
 </html>
