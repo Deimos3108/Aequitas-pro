@@ -5,17 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AEQUITAS CP PRO</title>
     
-    <!-- Premium Fonts: Cormorant Garamond for headings, DM Sans for UI -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Puter.js AI Integration -->
     <script src="https://js.puter.com/v2/"></script>
 
     <style>
-        /* CORE DESIGN SYSTEM */
         :root {
             --bg-color: #050d1a;
             --surface-color: #0d1f3c;
@@ -28,289 +22,102 @@
             --warning: #f0a32a;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'DM Sans', sans-serif; padding-bottom: 80px; overflow-x: hidden; }
+        h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: var(--gold-primary); }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'DM Sans', sans-serif;
-            padding-bottom: 80px; /* Space for bottom nav */
-            overflow-x: hidden;
-        }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: rgba(5, 13, 26, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--gold-glass); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.4rem; letter-spacing: 1px; }
+        .auth-btn { background: transparent; border: 1px solid var(--gold-primary); color: var(--gold-primary); padding: 8px 16px; border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; }
 
-        h1, h2, h3 {
-            font-family: 'Cormorant Garamond', serif;
-            color: var(--gold-primary);
-        }
+        .app-section { display: none; padding: 20px; animation: slideUp 0.3s ease-out forwards; }
+        .app-section.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HEADER */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background: rgba(5, 13, 26, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--gold-glass);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        .glass-card { background: var(--surface-color); border: 1px solid var(--gold-glass); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 1.2rem; }
+        .phase-badge { display: inline-block; background: var(--gold-glass); color: var(--gold-primary); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; }
 
-        .logo {
-            font-size: 1.4rem;
-            letter-spacing: 1px;
-        }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--surface-color); border-top: 1px solid var(--gold-glass); display: flex; justify-content: space-around; padding: 10px 0; padding-bottom: env(safe-area-inset-bottom, 15px); z-index: 1000; }
+        .nav-item { color: var(--text-muted); text-align: center; font-size: 0.75rem; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 60px; cursor: pointer; }
+        .nav-item i { font-size: 1.4rem; transition: transform 0.2s ease; }
+        .nav-item.active { color: var(--gold-primary); }
+        .nav-item.active i { transform: scale(1.1); }
 
-        .auth-btn {
-            background: transparent;
-            border: 1px solid var(--gold-primary);
-            color: var(--gold-primary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        /* SECTIONS & ANIMATIONS */
-        .app-section {
-            display: none;
-            padding: 20px;
-            animation: slideUp 0.3s ease-out forwards;
-        }
-
-        .app-section.active {
-            display: block;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* PREMIUM GLASS CARDS */
-        .glass-card {
-            background: var(--surface-color);
-            border: 1px solid var(--gold-glass);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-        }
-
-        .phase-badge {
-            display: inline-block;
-            background: var(--gold-glass);
-            color: var(--gold-primary);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 15px;
-        }
-
-        /* BOTTOM NAVIGATION */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: var(--surface-color);
-            border-top: 1px solid var(--gold-glass);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            padding-bottom: env(safe-area-inset-bottom, 15px);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            color: var(--text-muted);
-            text-align: center;
-            font-size: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            min-width: 60px;
-            cursor: pointer;
-        }
-
-        .nav-item i {
-            font-size: 1.4rem;
-            transition: transform 0.2s ease;
-        }
-
-        .nav-item.active {
-            color: var(--gold-primary);
-        }
-
-        .nav-item.active i {
-            transform: scale(1.1);
-        }
-
-        /* PROGRESS BARS */
-        .progress-container {
-            margin-bottom: 15px;
-        }
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            margin-bottom: 5px;
-            color: var(--text-muted);
-        }
-        .progress-track {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: var(--gold-primary);
-            border-radius: 3px;
-        }
+        .progress-container { margin-bottom: 15px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; color: var(--text-muted); }
+        .progress-track { height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--gold-primary); border-radius: 3px; }
+        
+        .calc-in { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--text-muted); border-radius: 4px; font-family: "DM Sans"; margin-bottom: 10px; }
+        .module-item { padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- Top Header -->
     <header>
         <h1 class="logo">AEQUITAS <span style="font-family: 'DM Sans'; font-size: 1rem; color: var(--text-main); font-weight: 400;">PRO</span></h1>
         <button class="auth-btn" id="puterAuthBtn" onclick="handleAuth()">Sign In</button>
     </header>
 
-    <!-- SECTION 1: COMMAND CENTER (Dashboard) -->
+    <!-- SECTION 1: COMMAND CENTER -->
     <section id="dashboard" class="app-section active">
-        <div class="phase-badge">PHASE 1: FOUNDATION (DAY 1)</div>
+        <div class="phase-badge">PHASE 1: FOUNDATION</div>
         
-        <!-- Track Health -->
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-chart-line"></i> Career Track Health</h2>
-            
-            <div class="progress-container">
-                <div class="progress-label"><span>Clinical Pharmacy</span><span>10%</span></div>
-                <div class="progress-track"><div class="progress-fill" style="width: 10%; background: var(--success);"></div></div>
-            </div>
-            
-            <div class="progress-container">
-                <div class="progress-label"><span>Pharmacovigilance (CRO)</span><span>15%</span></div>
-                <div class="progress-track"><div class="progress-fill" style="width: 15%;"></div></div>
-            </div>
-            
-            <div class="progress-container">
-                <div class="progress-label"><span>Medical Writing</span><span>5%</span></div>
-                <div class="progress-track"><div class="progress-fill" style="width: 5%; background: var(--warning);"></div></div>
-            </div>
+            <div class="progress-container"><div class="progress-label"><span>Clinical Pharmacy</span><span>10%</span></div><div class="progress-track"><div class="progress-fill" style="width: 10%; background: var(--success);"></div></div></div>
+            <div class="progress-container"><div class="progress-label"><span>Pharmacovigilance (CRO)</span><span>15%</span></div><div class="progress-track"><div class="progress-fill" style="width: 15%;"></div></div></div>
+            <div class="progress-container"><div class="progress-label"><span>Medical Writing</span><span>5%</span></div><div class="progress-track"><div class="progress-fill" style="width: 5%; background: var(--warning);"></div></div></div>
         </div>
 
-        <!-- Daily Intelligence Briefing -->
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-bolt"></i> Daily Briefing</h2>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">
-                <strong>Clinical Pearl:</strong> Never give IV calcium and IV sodium bicarbonate in the same line—they precipitate immediately. Flush the line first.
-            </p>
-            <p style="font-size: 0.9rem; color: var(--text-muted);">
-                <strong>Action:</strong> Check TS Pharmacy Council registration status today.
-            </p>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;"><strong>Clinical Pearl:</strong> Never give IV calcium and IV sodium bicarbonate in the same line—they precipitate immediately. Flush the line first.</p>
+            <p style="font-size: 0.9rem; color: var(--text-muted);"><strong>Action:</strong> Check TS Pharmacy Council registration status today.</p>
         </div>
     </section>
 
-    <!-- SECTION 2: 90-DAY CALENDAR (Placeholder for now) -->
+    <!-- SECTION 2: CALENDAR -->
     <section id="calendar" class="app-section">
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-calendar-check"></i> War Calendar</h2>
             <p style="color: var(--text-muted);">90-Day phased task engine will load here.</p>
-        </div>            
+        </div>
     </section>
 
-        <!-- SECTION 3: KNOWLEDGE ENGINE & CALCULATORS -->
+    <!-- SECTION 3: KNOWLEDGE ENGINE & CALCULATORS -->
     <section id="knowledge" class="app-section">
         <div class="phase-badge">CLINICAL ARSENAL</div>
 
-        <!-- PK Calculators -->
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-calculator"></i> PK Calculators</h2>
-            
             <select id="calcSelector" style="width: 100%; padding: 10px; margin-bottom: 15px; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--gold-primary); border-radius: 8px; font-family: 'DM Sans';">
                 <option value="crcl">1. Creatinine Clearance (Cockcroft-Gault)</option>
                 <option value="calcium">2. Corrected Calcium</option>
                 <option value="loading">3. Loading Dose</option>
                 <option value="bsa">4. Body Surface Area (BSA) & BMI</option>
                 <option value="infusion">5. IV Infusion Rate</option>
-                <option value="vanco" disabled>6. Vancomycin AUC (Coming Soon)</option>
-                <option value="pheny" disabled>7. Phenytoin Adjustment (Coming Soon)</option>
             </select>
 
-            <div id="calcInputs" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
-                <!-- Inputs injected via JS -->
-            </div>
+            <div id="calcInputs"></div>
 
             <button onclick="runCalculator()" style="width: 100%; padding: 12px; background: var(--gold-primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer;">Calculate</button>
             
-            <div id="calcResult" style="margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-weight: bold;">
-                <!-- Result injected here -->
-            </div>
+            <div id="calcResult" style="margin-top: 15px; padding: 15px; background: rgba(45, 212, 168, 0.1); border-left: 4px solid var(--success); border-radius: 4px; display: none; font-weight: bold;"></div>
         </div>
 
-        <!-- The 10 Knowledge Modules -->
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-book-medical"></i> 10 Core Modules</h2>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>1. Systemic Pharmacology</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>2. Pharmacotherapeutics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>3. Clinical Pharmacy Practice</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>4. Drug Interactions</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>5. Pharmacokinetics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>6. Critical Care Pharmacy</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>7. Evidence-Based Medicine</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>8. Special Populations</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>9. Pharmacovigilance (PV)</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-                <div class="module-item" style="padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <span>10. Medical/Regulatory Writing</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i>
-                </div>
-            </div>
+            <div class="module-item"><span>1. Systemic Pharmacology</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
+            <div class="module-item"><span>2. Pharmacotherapeutics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
+            <div class="module-item"><span>3. Clinical Pharmacy Practice</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
+            <div class="module-item"><span>4. Drug Interactions</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
+            <div class="module-item"><span>5. Pharmacokinetics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
         </div>
     </section>
-    
-    </section>
 
-    <!-- SECTION 4: JOB WAR ROOM (Placeholder) -->
+    <!-- SECTION 4: CAREER -->
     <section id="career" class="app-section">
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-briefcase"></i> Job War Room</h2>
@@ -318,7 +125,7 @@
         </div>
     </section>
 
-    <!-- SECTION 36: IELTS MASTERCLASS (Placeholder) -->
+    <!-- SECTION 36: IELTS -->
     <section id="ielts" class="app-section">
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-earth-americas"></i> IELTS Band 9</h2>
@@ -328,83 +135,50 @@
 
     <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('dashboard', this)">
-            <i class="fa-solid fa-shield-halved"></i>
-            <span>Command</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('calendar', this)">
-            <i class="fa-solid fa-calendar-day"></i>
-            <span>Calendar</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('knowledge', this)">
-            <i class="fa-solid fa-brain"></i>
-            <span>Learn</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('career', this)">
-            <i class="fa-solid fa-crosshairs"></i>
-            <span>Career</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('ielts', this)">
-            <i class="fa-solid fa-language"></i>
-            <span>IELTS</span>
-        </div>
+        <div class="nav-item active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-shield-halved"></i><span>Command</span></div>
+        <div class="nav-item" onclick="switchTab('calendar', this)"><i class="fa-solid fa-calendar-day"></i><span>Calendar</span></div>
+        <div class="nav-item" onclick="switchTab('knowledge', this)"><i class="fa-solid fa-brain"></i><span>Learn</span></div>
+        <div class="nav-item" onclick="switchTab('career', this)"><i class="fa-solid fa-crosshairs"></i><span>Career</span></div>
+        <div class="nav-item" onclick="switchTab('ielts', this)"><i class="fa-solid fa-language"></i><span>IELTS</span></div>
     </nav>
 
-    <!-- CORE LOGIC & DATABASE ARCHITECTURE -->
     <script>
-        // 1. Navigation Logic
+        // NAVIGATION LOGIC
         function switchTab(sectionId, element) {
-            // Hide all sections
-            document.querySelectorAll('.app-section').forEach(sec => {
-                sec.classList.remove('active');
-            });
-            // Show target section
+            document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
-            
-            // Update nav styling
-            document.querySelectorAll('.nav-item').forEach(nav => {
-                nav.classList.remove('active');
-            });
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             element.classList.add('active');
-            
-            // Haptic feedback (works on some Androids in PWA mode)
             if (navigator.vibrate) { navigator.vibrate(50); }
         }
 
-        // 2. Puter.js Authentication Flow
+        // PUTER AUTH LOGIC
         async function checkAuthState() {
             try {
-                const isSignedIn = puter.auth.isSignedIn();
-                const btn = document.getElementById('puterAuthBtn');
-                
-                if (isSignedIn) {
-                    const user = await puter.auth.getUser();
+                if (puter.auth.isSignedIn()) {
+                    const btn = document.getElementById('puterAuthBtn');
                     btn.textContent = "AI Ready";
                     btn.style.borderColor = "var(--success)";
                     btn.style.color = "var(--success)";
-                } else {
-                    btn.textContent = "Sign In (AI)";
                 }
-            } catch (error) {
-                console.error("Puter auth check failed:", error);
-            
+            } catch (error) { console.error("Auth check failed:", error); }
+        }
+
         async function handleAuth() {
             const btn = document.getElementById('puterAuthBtn');
             const originalText = btn.textContent;
             btn.textContent = "Connecting...";
-            
             try {
                 if (!puter.auth.isSignedIn()) {
-                    // Detect if running locally in TrebEdit
                     if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                        alert("Note: Puter Sign-In is blocked by mobile code editors for security reasons. It will freeze here. Please test Sign-In on your live GitHub link!");
+                        alert("Testing in local editor detected. Please test Sign-In on your live GitHub link!");
                         btn.textContent = originalText;
-                        return; // Stop the freeze
+                        return;
                     }
                     await puter.auth.signIn();
                     checkAuthState();
                 } else {
-                    alert("You are already authenticated and ready to use AI features.");
+                    alert("You are already authenticated and ready.");
                     checkAuthState();
                 }
             } catch (error) {
@@ -412,51 +186,81 @@
                 btn.textContent = originalText;
             }
         }
-                      }
-        
 
-        // 3. Database Manager (IndexedDB Skeleton - Prevents future crashes)
-        class DBManager {
-            constructor() {
-                this.dbName = 'AequitasDB';
-                this.version = 1;
-                this.db = null;
-                this.ready = this.init();
-            }
+        // CALCULATOR LOGIC
+        const calcData = {
+            crcl: { html: '<input type="number" id="age" placeholder="Age (years)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="scr" placeholder="Serum Creatinine (mg/dL)" class="calc-in"><select id="sex" class="calc-in"><option value="m">Male</option><option value="f">Female</option></select>' },
+            calcium: { html: '<input type="number" id="ca" placeholder="Measured Calcium (mg/dL)" class="calc-in"><input type="number" id="alb" placeholder="Albumin (g/dL)" class="calc-in">' },
+            loading: { html: '<input type="number" id="vd" placeholder="Volume of Dist. (L/kg)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="targetCp" placeholder="Target Conc. (mg/L)" class="calc-in">' },
+            bsa: { html: '<input type="number" id="ht" placeholder="Height (cm)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in">' },
+            infusion: { html: '<input type="number" id="dose" placeholder="Dose (mg)" class="calc-in"><input type="number" id="vol" placeholder="Volume (mL)" class="calc-in"><input type="number" id="time" placeholder="Time (hours)" class="calc-in">' }
+        };
 
-            async init() {
-                return new Promise((resolve, reject) => {
-                    const request = indexedDB.open(this.dbName, this.version);
-                    
-                    request.onupgradeneeded = (event) => {
-                        const db = event.target.result;
-                        // We will add object stores (ai_content, portfolio, etc.) here in Session 2 & 3
-                        if (!db.objectStoreNames.contains('ai_content')) {
-                            db.createObjectStore('ai_content', { keyPath: 'id', autoIncrement: true });
-                        }
-                    };
-
-                    request.onsuccess = (event) => {
-                        this.db = event.target.result;
-                        console.log("Database initialized successfully.");
-                        resolve(true);
-                    };
-
-                    request.onerror = (event) => {
-                        console.error("Database error:", event.target.error);
-                        reject(event.target.error);
-                    };
-                });
+        function runCalculator() {
+            const type = document.getElementById('calcSelector').value;
+            const calcResult = document.getElementById('calcResult');
+            let resultText = "";
+            
+            try {
+                if(type === 'crcl') {
+                    let age = parseFloat(document.getElementById('age').value);
+                    let wt = parseFloat(document.getElementById('wt').value);
+                    let scr = parseFloat(document.getElementById('scr').value);
+                    let sex = document.getElementById('sex').value;
+                    let crcl = ((140 - age) * wt) / (72 * scr);
+                    if(sex === 'f') crcl *= 0.85;
+                    resultText = `CrCl: ${crcl.toFixed(2)} mL/min`;
+                } else if (type === 'calcium') {
+                    let ca = parseFloat(document.getElementById('ca').value);
+                    let alb = parseFloat(document.getElementById('alb').value);
+                    let corr = ca + (0.8 * (4.0 - alb));
+                    resultText = `Corrected Calcium: ${corr.toFixed(2)} mg/dL`;
+                } else if (type === 'loading') {
+                    let vd = parseFloat(document.getElementById('vd').value);
+                    let wt = parseFloat(document.getElementById('wt').value);
+                    let target = parseFloat(document.getElementById('targetCp').value);
+                    let dose = vd * wt * target;
+                    resultText = `Loading Dose: ${dose.toFixed(2)} mg`;
+                } else if (type === 'bsa') {
+                    let ht = parseFloat(document.getElementById('ht').value);
+                    let wt = parseFloat(document.getElementById('wt').value);
+                    let bsa = Math.sqrt((ht * wt) / 3600);
+                    let bmi = wt / Math.pow((ht/100), 2);
+                    resultText = `BSA: ${bsa.toFixed(2)} m² <br> BMI: ${bmi.toFixed(1)} kg/m²`;
+                } else if (type === 'infusion') {
+                    let dose = parseFloat(document.getElementById('dose').value);
+                    let vol = parseFloat(document.getElementById('vol').value);
+                    let time = parseFloat(document.getElementById('time').value);
+                    let rate = vol / time;
+                    let conc = dose / vol;
+                    resultText = `Rate: ${rate.toFixed(1)} mL/hr <br> Concentration: ${conc.toFixed(2)} mg/mL`;
+                }
+                
+                if (resultText.includes("NaN")) throw new Error("Missing values");
+                calcResult.innerHTML = resultText;
+                calcResult.style.display = 'block';
+            } catch (err) {
+                calcResult.innerHTML = "<span style='color: var(--danger);'>Please fill all fields correctly.</span>";
+                calcResult.style.display = 'block';
             }
         }
 
-        // Initialize DB on startup
-        const appDB = new DBManager();
-
-        // Run on load
+        // INITIALIZATION
         document.addEventListener('DOMContentLoaded', () => {
             checkAuthState();
+            
+            // Setup Calculators
+            const calcSelector = document.getElementById('calcSelector');
+            const calcInputs = document.getElementById('calcInputs');
+            
+            if(calcSelector && calcInputs) {
+                calcInputs.innerHTML = calcData['crcl'].html;
+                calcSelector.addEventListener('change', (e) => {
+                    calcInputs.innerHTML = calcData[e.target.value] ? calcData[e.target.value].html : '';
+                    document.getElementById('calcResult').style.display = 'none';
+                });
+            }
         });
-                // --- SECTION 2: PK CALCULATOR LOGIC ---
-        const calcData = {
-            crcl: { html: '<input type="number" id="age" placeholder="Age (years)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="scr" placeholder="Serum Creat
+    </script>
+</body>
+</html>
