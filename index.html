@@ -74,7 +74,7 @@
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--surface-color); border: 1px solid var(--gold-primary); border-radius: 12px; padding: 20px; width: 100%; max-width: 400px; }
         
-        /* JOB WAR ROOM */
+        /* JOB WAR ROOM & KNOWLEDGE GRID */
         .job-card { background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold-primary); padding: 12px; margin-bottom: 10px; border-radius: 4px; }
         .job-title { font-weight: bold; color: var(--text-main); font-size: 1rem; }
         .job-detail { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
@@ -256,9 +256,7 @@
         }
         checkKeyStatus();
 
-        // ----------------------------------------------------
         // INDEXED-DB: THE SMART STORAGE (NO DUPLICATES)
-        // ----------------------------------------------------
         let db;
         const request = indexedDB.open("AequitasDB", 1);
         request.onupgradeneeded = (e) => {
@@ -286,7 +284,7 @@
             let added = 0;
             mcqArray.forEach(mcq => {
                 mcq.topic = topic; 
-                const req = store.put(mcq); // put overwrites duplicates based on question string
+                const req = store.put(mcq); 
                 req.onsuccess = () => added++;
             });
             tx.oncomplete = () => { updateDBCount(); };
@@ -312,16 +310,18 @@
         }
 
         // ----------------------------------------------------
-        // GEMINI AI DIRECT FETCH (Using gemini-pro - universally supported fallback)
+        // GEMINI AI DIRECT FETCH (Using v1 stable & gemini-1.5-flash)
         // ----------------------------------------------------
         async function callGemini(prompt) {
             const apiKey = localStorage.getItem('aq_api_key');
             if (!apiKey) { alert("Please open Settings and enter your Gemini API Key first."); return null; }
 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+            // FIX: Using the v1 stable endpoint and the official 1.5-flash model
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             
             const payload = {
-                contents: [{ parts: [{ text: prompt }] }]
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: "application/json" }
             };
 
             try {
@@ -356,7 +356,6 @@
             
             if (rawText) {
                 try {
-                    // Auto-cleaner for rogue markdown if AI ignores instructions
                     rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
                     const data = JSON.parse(rawText);
                     saveToDB(data, topic);
