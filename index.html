@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AEQUITAS CP PRO v2.1</title>
+    <title>AEQUITAS CP PRO v3.0</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -37,7 +37,6 @@
 
         .briefing-text { font-size: 0.9rem; color: var(--text-muted); margin-bottom: var(--spacing-small); line-height: 1.4; }
         .briefing-text strong { font-weight: 600; color: var(--text-main); }
-        
         [data-status="placeholder"] .glass-card { opacity: 0.8; }
         .status-badge { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; background: var(--warning); color: var(--bg-color); padding: 4px 8px; border-radius: 4px; margin-left: auto; font-weight: bold; text-transform: uppercase; }
 
@@ -49,6 +48,7 @@
         .nav-item.active i { transform: scale(1.1); }
 
         .calc-select, .calc-in, .api-input { width: 100%; padding: var(--spacing-small); margin-bottom: 15px; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--gold-primary); border-radius: 8px; font-family: 'DM Sans'; outline: none; }
+        textarea.calc-in { resize: vertical; min-height: 80px; }
         .action-btn { width: 100%; padding: 12px; background: var(--gold-primary); color: var(--bg-color); border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 5px; transition: opacity 0.2s; }
         .action-btn.secondary { background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary); margin-bottom: 15px;}
         .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -67,9 +67,10 @@
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--surface-color); border: 1px solid var(--gold-primary); border-radius: 12px; padding: 20px; width: 100%; max-width: 400px; }
         
-        .job-card { background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold-primary); padding: 12px; margin-bottom: 10px; border-radius: 4px; }
+        .job-card { background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold-primary); padding: 12px; margin-bottom: 10px; border-radius: 4px; position: relative; }
         .job-title { font-weight: bold; color: var(--text-main); font-size: 1rem; }
         .job-detail { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+        .badge-status { position: absolute; top: 12px; right: 12px; font-size: 0.7rem; padding: 3px 6px; border-radius: 4px; background: rgba(255,255,255,0.1); }
         .modules-grid { display: flex; flex-direction: column; gap: var(--spacing-small); }
         .module-item { padding: 12px; border: 1px solid var(--gold-glass); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
     </style>
@@ -91,6 +92,7 @@
         </div>
     </div>
 
+    <!-- COMMAND CENTER -->
     <section id="dashboard" class="app-section active">
         <div class="phase-badge">PHASE 1: FOUNDATION</div>
         <div class="glass-card">
@@ -101,6 +103,7 @@
         </div>
     </section>
 
+    <!-- CALENDAR -->
     <section id="calendar" class="app-section" data-status="placeholder">
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-calendar-check"></i> War Calendar <span class="status-badge">In Dev</span></h2>
@@ -108,6 +111,7 @@
         </div>
     </section>
 
+    <!-- KNOWLEDGE ENGINE -->
     <section id="knowledge" class="app-section">
         <div class="phase-badge">CLINICAL ARSENAL</div>
 
@@ -143,26 +147,54 @@
             <button id="runCalcBtn" class="action-btn">Calculate</button>
             <div id="calcResult" class="result-box"></div>
         </div>
-
-        <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-book-medical"></i> 10 Core Modules</h2>
-            <div class="modules-grid">
-                <div class="module-item"><span>1. Systemic Pharmacology</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-                <div class="module-item"><span>2. Pharmacotherapeutics</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-                <div class="module-item"><span>3. Clinical Pharmacy Practice</span> <i class="fa-solid fa-chevron-right" style="color: var(--gold-primary);"></i></div>
-            </div>
-        </div>
     </section>
 
+    <!-- CAREER (JOB WAR ROOM + PV + WRITING) -->
     <section id="career" class="app-section">
         <div class="phase-badge">HYDERABAD JOB WAR ROOM</div>
+        
+        <!-- Job Tracker -->
         <div class="glass-card">
-            <h2 class="card-header"><i class="fa-solid fa-hospital"></i> Clinical Pharmacy</h2>
-            <div class="job-card"><div class="job-title">Apollo Hospitals</div><div class="job-detail"><strong>Role:</strong> Clinical Pharmacist</div></div>
-            <div class="job-card"><div class="job-title">Yashoda Hospitals</div><div class="job-detail"><strong>Role:</strong> Ward Pharmacist</div></div>
+            <h2 class="card-header"><i class="fa-solid fa-crosshairs"></i> Application Tracker</h2>
+            <input type="text" id="jobCompany" class="calc-in" placeholder="Company (e.g. Syneos Health)">
+            <input type="text" id="jobRole" class="calc-in" placeholder="Role (e.g. PV Associate)">
+            <select id="jobStatus" class="calc-select">
+                <option value="Applied">Applied</option>
+                <option value="Interviewing">Interviewing</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+            <button id="addJobBtn" class="action-btn secondary">Log Application</button>
+            <div id="jobList" style="margin-top: 15px;"></div>
+        </div>
+
+        <!-- PV Workbench -->
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-shield-virus"></i> PV Workbench</h2>
+            <p class="briefing-text">Naranjo Causality Assessment Calculator</p>
+            <select id="n1" class="calc-select"><option value="0">1. Previous reports? (No/Unk=0, Yes=+1)</option><option value="1">Yes (+1)</option></select>
+            <select id="n2" class="calc-select"><option value="0">2. AE appeared after drug? (No=0, Yes=+2)</option><option value="2">Yes (+2)</option></select>
+            <select id="n3" class="calc-select"><option value="0">3. AE improved upon stopping? (No=0, Yes=+1)</option><option value="1">Yes (+1)</option></select>
+            <select id="n4" class="calc-select"><option value="0">4. AE reappeared on re-challenge? (No=0, Yes=+2)</option><option value="2">Yes (+2)</option></select>
+            <select id="n5" class="calc-select"><option value="0">5. Objective evidence/Labs? (No=0, Yes=+1)</option><option value="1">Yes (+1)</option></select>
+            <button id="calcNaranjoBtn" class="action-btn">Calculate Score</button>
+            <div id="naranjoResult" class="result-box"></div>
+        </div>
+
+        <!-- Medical Writing Studio -->
+        <div class="glass-card">
+            <h2 class="card-header"><i class="fa-solid fa-pen-nib"></i> Med Writing Studio</h2>
+            <p class="briefing-text">Clinical SOAP Note Builder</p>
+            <input type="text" id="soapTitle" class="calc-in" placeholder="Case Title (e.g. Pt with HTN & T2DM)">
+            <textarea id="soapS" class="calc-in" placeholder="Subjective (CC, HPI)"></textarea>
+            <textarea id="soapO" class="calc-in" placeholder="Objective (Vitals, Labs)"></textarea>
+            <textarea id="soapA" class="calc-in" placeholder="Assessment (Diagnosis)"></textarea>
+            <textarea id="soapP" class="calc-in" placeholder="Plan (Treatment, Monitoring)"></textarea>
+            <button id="saveSoapBtn" class="action-btn secondary"><i class="fa-solid fa-folder-plus"></i> Save to Portfolio</button>
+            <div id="portfolioList" style="margin-top: 15px;"></div>
         </div>
     </section>
 
+    <!-- IELTS -->
     <section id="ielts" class="app-section" data-status="placeholder">
         <div class="glass-card">
             <h2 class="card-header"><i class="fa-solid fa-earth-americas"></i> IELTS Band 9 <span class="status-badge">In Dev</span></h2>
@@ -170,6 +202,7 @@
         </div>
     </section>
 
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav" id="mainNav">
         <div class="nav-item active" data-section="dashboard"><i class="fa-solid fa-shield-halved"></i><span>Command</span></div>
         <div class="nav-item" data-section="calendar"><i class="fa-solid fa-calendar-day"></i><span>Calendar</span></div>
@@ -179,6 +212,7 @@
     </nav>
 
     <script>
+        // NAVIGATION LOGIC
         document.getElementById('mainNav').addEventListener('click', (event) => {
             const navItem = event.target.closest('.nav-item');
             if (!navItem) return;
@@ -187,9 +221,11 @@
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             navItem.classList.add('active');
+            window.scrollTo(0, 0);
             if (navigator.vibrate) navigator.vibrate(50);
         });
 
+        // SETTINGS
         const settingsModal = document.getElementById('settingsModal');
         const apiKeyInput = document.getElementById('apiKeyInput');
         const settingsBtn = document.getElementById('openSettingsBtn');
@@ -213,6 +249,7 @@
         }
         checkKeyStatus();
 
+        // INDEXED-DB FOR MCQS
         let db;
         const request = indexedDB.open("AequitasDB", 1);
         request.onupgradeneeded = (e) => {
@@ -238,80 +275,52 @@
             tx.oncomplete = () => { updateDBCount(); };
         }
 
-        function renderQuiz(dataArray) {
-            const container = document.getElementById('quizContainer');
-            let htmlStr = '';
-            if(dataArray.length === 0) {
-                container.innerHTML = "<p class='briefing-text'>No MCQs found. Generate some first!</p>"; return;
-            }
-            dataArray.forEach((item, index) => {
-                htmlStr += `<div class="quiz-card" data-ans="${item.ans}">
-                    <div class="quiz-q">Q${index + 1}. ${item.q}</div><div class="opts-container">`;
-                item.opts.forEach((opt, oIdx) => { htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`; });
-                htmlStr += `</div><div class="quiz-explanation"><strong>Explanation:</strong> ${item.exp}</div></div>`;
-            });
-            container.innerHTML = htmlStr;
-        }
-
-        // --- NEW GROQ AI INTEGRATION (Llama 3.3 70B) ---
+        // Llama 3.3 70B AI Call
         async function callGroq(topic, diff) {
             const apiKey = localStorage.getItem('aq_groq_key');
             if (!apiKey) { alert("Please open Settings and enter your Groq API Key."); return null; }
-
             const url = "https://api.groq.com/openai/v1/chat/completions";
             const payload = {
-                model: "llama-3.3-70b-versatile", // UPDATED TO NEWEST GROQ MODEL
+                model: "llama-3.3-70b-versatile",
                 messages: [
                     { role: "system", content: "You are a clinical pharmacy educator. Generate 10 multiple choice questions. Output ONLY a valid JSON object. The JSON must contain a single root key called 'questions' which is an array of objects. Each object must have: 'q' (the question string), 'opts' (array of exactly 4 strings), 'ans' (integer 0-3 for correct index), and 'exp' (string explanation)." },
                     { role: "user", content: `Topic: ${topic}. Difficulty: ${diff}. Output JSON object.` }
                 ],
                 response_format: { type: "json_object" }
             };
-
             try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+                const response = await fetch(url, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) { const errorData = await response.json(); alert(`Groq API Error: ${errorData.error.message}`); return null; }
+                const data = await response.json(); return data.choices[0].message.content;
+            } catch (error) { alert("Network failed."); return null; }
+        }
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    alert(`Groq API Error: ${errorData.error.message}`);
-                    return null;
-                }
-                const data = await response.json();
-                return data.choices[0].message.content;
-            } catch (error) {
-                alert("Network failed."); return null;
-            }
+        function renderQuiz(dataArray) {
+            const container = document.getElementById('quizContainer');
+            let htmlStr = '';
+            if(dataArray.length === 0) { container.innerHTML = "<p class='briefing-text'>No MCQs found. Generate some first!</p>"; return; }
+            dataArray.forEach((item, index) => {
+                htmlStr += `<div class="quiz-card" data-ans="${item.ans}"><div class="quiz-q">Q${index + 1}. ${item.q}</div><div class="opts-container">`;
+                item.opts.forEach((opt, oIdx) => { htmlStr += `<div class="quiz-option" data-idx="${oIdx}">${opt}</div>`; });
+                htmlStr += `</div><div class="quiz-explanation"><strong>Explanation:</strong> ${item.exp}</div></div>`;
+            });
+            container.innerHTML = htmlStr;
         }
 
         document.getElementById('generateQuizBtn').addEventListener('click', async () => {
             const btn = document.getElementById('generateQuizBtn');
-            const topic = document.getElementById('quizTopic').value;
-            const diff = document.getElementById('quizDiff').value;
-            
-            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating (Llama 3.3)...";
-            btn.disabled = true;
-
+            const topic = document.getElementById('quizTopic').value; const diff = document.getElementById('quizDiff').value;
+            btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Generating (Llama 3.3)..."; btn.disabled = true;
             const rawText = await callGroq(topic, diff); 
-            
             if (rawText) {
                 try {
                     const parsed = JSON.parse(rawText);
                     const mcqArray = parsed.questions || parsed.Questions || [];
-                    if (mcqArray.length > 0) {
-                        saveToDB(mcqArray, topic);
-                        renderQuiz(mcqArray.slice(0, 5));
-                    } else { throw new Error("No questions array found in JSON"); }
-                } catch (e) {
-                    alert("AI returned malformed data. Try again.");
-                    console.error(e);
-                }
+                    if (mcqArray.length > 0) { saveToDB(mcqArray, topic); renderQuiz(mcqArray.slice(0, 5)); } 
+                    else { throw new Error("No questions array found in JSON"); }
+                } catch (e) { alert("AI returned malformed data. Try again."); }
             }
-            btn.innerHTML = "<i class='fa-solid fa-cloud-arrow-down'></i> Generate & Store 10 New MCQs";
-            btn.disabled = false;
+            btn.innerHTML = "<i class='fa-solid fa-cloud-arrow-down'></i> Generate & Store 10 New MCQs"; btn.disabled = false;
         });
 
         document.getElementById('practiceQuizBtn').addEventListener('click', () => {
@@ -329,18 +338,65 @@
         document.getElementById('quizContainer').addEventListener('click', (event) => {
             const optDiv = event.target.closest('.quiz-option');
             if (!optDiv) return;
-            const optsContainer = optDiv.parentElement;
-            const card = optsContainer.parentElement;
-            const correctIdx = parseInt(card.dataset.ans);
-            const clickedIdx = parseInt(optDiv.dataset.idx);
-
+            const optsContainer = optDiv.parentElement; const card = optsContainer.parentElement;
+            const correctIdx = parseInt(card.dataset.ans); const clickedIdx = parseInt(optDiv.dataset.idx);
             optsContainer.querySelectorAll('.quiz-option').forEach(el => el.classList.add('disabled'));
             if (clickedIdx === correctIdx) optDiv.classList.add('correct');
             else { optDiv.classList.add('incorrect'); optsContainer.children[correctIdx].classList.add('correct'); }
             card.querySelector('.quiz-explanation').style.display = 'block';
         });
 
-        // Calculators
+        // SECTION 4: CAREER LOGIC
+        // Job Tracker
+        function loadJobs() {
+            const jobs = JSON.parse(localStorage.getItem('aq_jobs') || '[]');
+            const container = document.getElementById('jobList');
+            container.innerHTML = jobs.map(j => `<div class="job-card"><div class="badge-status">${j.status}</div><div class="job-title">${j.company}</div><div class="job-detail">${j.role} | ${j.date}</div></div>`).join('');
+        }
+        document.getElementById('addJobBtn').addEventListener('click', () => {
+            const comp = document.getElementById('jobCompany').value.trim();
+            const role = document.getElementById('jobRole').value.trim();
+            const status = document.getElementById('jobStatus').value;
+            if(!comp || !role) { alert("Enter company and role"); return; }
+            const jobs = JSON.parse(localStorage.getItem('aq_jobs') || '[]');
+            jobs.unshift({ company: comp, role: role, status: status, date: new Date().toLocaleDateString() });
+            localStorage.setItem('aq_jobs', JSON.stringify(jobs));
+            document.getElementById('jobCompany').value = ''; document.getElementById('jobRole').value = '';
+            loadJobs();
+        });
+        loadJobs();
+
+        // Naranjo Calculator
+        document.getElementById('calcNaranjoBtn').addEventListener('click', () => {
+            let score = 0;
+            for(let i=1; i<=5; i++) { score += parseInt(document.getElementById('n'+i).value); }
+            let cat = "Doubtful";
+            if (score >= 9) cat = "Definite"; else if (score >= 5) cat = "Probable"; else if (score >= 1) cat = "Possible";
+            const resBox = document.getElementById('naranjoResult');
+            resBox.innerHTML = `Score: ${score} <br> Causality: <span style="color:var(--gold-primary);">${cat}</span>`;
+            resBox.style.display = 'block';
+        });
+
+        // SOAP Portfolio
+        function loadPortfolio() {
+            const items = JSON.parse(localStorage.getItem('aq_portfolio') || '[]');
+            const container = document.getElementById('portfolioList');
+            container.innerHTML = items.map(i => `<div class="job-card" style="border-left-color:var(--success);"><div class="job-title">${i.title}</div><div class="job-detail">Type: SOAP Note | Date: ${i.date}</div></div>`).join('');
+        }
+        document.getElementById('saveSoapBtn').addEventListener('click', () => {
+            const title = document.getElementById('soapTitle').value.trim();
+            const s = document.getElementById('soapS').value.trim();
+            if(!title || !s) { alert("Enter at least a Title and Subjective notes"); return; }
+            const items = JSON.parse(localStorage.getItem('aq_portfolio') || '[]');
+            items.unshift({ title: title, s: s, o: document.getElementById('soapO').value, a: document.getElementById('soapA').value, p: document.getElementById('soapP').value, date: new Date().toLocaleDateString() });
+            localStorage.setItem('aq_portfolio', JSON.stringify(items));
+            ['soapTitle','soapS','soapO','soapA','soapP'].forEach(id => document.getElementById(id).value = '');
+            loadPortfolio();
+            alert("SOAP Note saved to offline portfolio!");
+        });
+        loadPortfolio();
+
+        // PK Calculators Logic
         const calcData = {
             crcl: '<input type="number" id="age" placeholder="Age (years)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in"><input type="number" id="scr" placeholder="Serum Creatinine (mg/dL)" class="calc-in"><select id="sex" class="calc-in"><option value="m">Male</option><option value="f">Female</option></select>',
             calcium: '<input type="number" id="ca" placeholder="Measured Calcium (mg/dL)" class="calc-in"><input type="number" id="alb" placeholder="Albumin (g/dL)" class="calc-in">',
@@ -348,7 +404,6 @@
             bsa: '<input type="number" id="ht" placeholder="Height (cm)" class="calc-in"><input type="number" id="wt" placeholder="Weight (kg)" class="calc-in">',
             infusion: '<input type="number" id="dose" placeholder="Dose (mg)" class="calc-in"><input type="number" id="vol" placeholder="Volume (mL)" class="calc-in"><input type="number" id="time" placeholder="Time (hours)" class="calc-in">'
         };
-
         const calcSelector = document.getElementById('calcSelector');
         const calcInputs = document.getElementById('calcInputs');
         if(calcSelector && calcInputs) {
@@ -358,16 +413,12 @@
                 document.getElementById('calcResult').style.display = 'none';
             });
         }
-
         document.getElementById('runCalcBtn').addEventListener('click', () => {
-            const type = document.getElementById('calcSelector').value;
-            const calcResult = document.getElementById('calcResult');
-            let resultText = "";
+            const type = document.getElementById('calcSelector').value; const calcResult = document.getElementById('calcResult'); let resultText = "";
             try {
                 if(type === 'crcl') {
                     let age = parseFloat(document.getElementById('age').value); let wt = parseFloat(document.getElementById('wt').value); let scr = parseFloat(document.getElementById('scr').value); let sex = document.getElementById('sex').value;
-                    if(isNaN(age) || isNaN(wt) || isNaN(scr)) throw new Error();
-                    let crcl = ((140 - age) * wt) / (72 * scr); if(sex === 'f') crcl *= 0.85; resultText = `CrCl: ${crcl.toFixed(2)} mL/min`;
+                    if(isNaN(age) || isNaN(wt) || isNaN(scr)) throw new Error(); let crcl = ((140 - age) * wt) / (72 * scr); if(sex === 'f') crcl *= 0.85; resultText = `CrCl: ${crcl.toFixed(2)} mL/min`;
                 } else if (type === 'calcium') {
                     let ca = parseFloat(document.getElementById('ca').value); let alb = parseFloat(document.getElementById('alb').value);
                     if(isNaN(ca) || isNaN(alb)) throw new Error(); let corr = ca + (0.8 * (4.0 - alb)); resultText = `Corrected Calcium: ${corr.toFixed(2)} mg/dL`;
@@ -382,9 +433,7 @@
                     if(isNaN(dose) || isNaN(vol) || isNaN(time)) throw new Error(); let rate = vol / time; let conc = dose / vol; resultText = `Rate: ${rate.toFixed(1)} mL/hr <br> Concentration: ${conc.toFixed(2)} mg/mL`;
                 }
                 calcResult.innerHTML = resultText; calcResult.style.display = 'block';
-            } catch (err) {
-                calcResult.innerHTML = "<span style='color: var(--danger);'>Please fill all fields correctly.</span>"; calcResult.style.display = 'block';
-            }
+            } catch (err) { calcResult.innerHTML = "<span style='color: var(--danger);'>Please fill all fields correctly.</span>"; calcResult.style.display = 'block'; }
         });
     </script>
 </body>
